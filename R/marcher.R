@@ -1,0 +1,25 @@
+#' Migration and Range Change Analysis in R
+#' 
+#'  A collection of functions for performing a migration and range change analysis (MRSA) as described in by Gurarie et al. (in press).  The key features are estimation of precise times, distances, and locations of a one or two step range shift in movement data. 
+#' 
+#' @details Some key functions for using \code{marcher} are:
+#' 
+#' 1. \code{\link{estimate.shift}} {Estimate a range shift process.}
+#' 
+#' 2. \code{\link{simulate.shift}} {Simulate a range shift process.}
+#' 
+#' 3. \code{\link{plot.shiftfit}} {Visualize a range shift process.}
+#' 
+#' 4. \code{\link{test.rangeshift}} {Test whether a range shift occurred.}
+#' 
+#' 5. \code{\link{test.return}} {Test whether a migration was a return migration.}
+#' 
+#' 6. \code{\link{test.stopover}} {Test whether a stopover occurred during a migration.}
+#' 
+#' Several simulated datasets: \code{\link{SimulatedTracks}}.  One roe deer (Capreolus capreolus) track: \code{\link{Michela}}.
+#' 
+#' See the respective help files and \code{vignette("marcher")} for more details and examples. 
+#' 
+#' @references Gurarie, E., F. Cagnacci, W. Peters, C. Fleming, J. Calabrese, T. Mueller and W. Fagan (in review at Journal of Animal Ecology) Whether, whither, when, and will it return?  A framework for modeling animal range shifts and migrations. 
+
+"_PACKAGE"

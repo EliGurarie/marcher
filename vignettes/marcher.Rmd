@@ -1,0 +1,463 @@
+---
+title: 'Migration and range change estimation: the `marcher` package'
+author: "Elie Gurarie"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{marcher}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache=FALSE, fig.width = 6)
+#  html_document:
+#    number_sections: yes
+#    toc: yes
+#    toc_depth: 2
+
+#output:
+#  pdf_document:
+#    toc: yes
+#    number_sections: yes
+#    toc_depth: 2
+		
+#output: rmarkdown::html_vignette
+#vignette: >
+#  %\VignetteIndexEntry{marcher}
+#  %\VignetteEngine{knitr::rmarkdown}
+#  \usepackage[utf8]{inputenc}
+```
+
+# Introduction
+
+The `marcher` package provides functions and tools for mechanistic range shift analysis decribed in Gurarie et al. (*in press*).  The methods are designed to estimate parameters of range shifting, including coordinates of the centroids of (2 or 3) ranges, the times of initiation and duration of each shift, ranging areas and time scales of location and velocity autocorrelation.  Because the estimates are likelihood based, there are several handy inferential tools including confidence intervals around all estimates and a sequence of hypothesis tests, including: (a.) What is the appropriate (highest) level of autocorrelation in the data? (b.) Is an estimated range shift significant? (c.) Is there a stop-over during the migration? (d.) Is a return migration a strict return migration? 
+ 
+In this vignette, I briefly introduce the family of range shift models and illustrate methods to simulate, visualize, estimate and conduct the hypothesis tests. 
+
+# Model description
+
+The movement of an animal ${\bf z}(t)$ is modeled as a possibly auto-correlated ranging process ${\bf r}(t)$ around a mean process ${\bf m}(t)$: 
+$$ {\bf z}(t) = {\bf m}(t) + {\bf r}(t) $$
+where bold facing indicates 2D vectors representing an animal location on a plane in standard units, such as UTM easting and northing. 
+
+## Mean process
+
+The mean component describes the range shift, thus its key parameters are the central location of each focal range and the timing (beginning and duration) of each transition.  The simplest (and, practically, most useful) range shifting event is one with two ranges and no stop-overs, i.e. ${\bf m}(t)$ shifts from one location to another over some transition duration $\Delta t$ beginning at some time $t_1$
+$${\bf m}(t) = \begin{cases}
+											{\bf m}_1 &\text{where} \,\, t < t_1 \\ 
+					{\bf m}_1 + ({\bf m}_2 - {\bf m}_1) {(t-t_1) \over \Delta t}	&\text{where} \,\, t_1 < t < t_1 + \Delta t \\
+											{\bf m}_2 &\text{where} \,\, t > t_1 + \Delta t
+					\end{cases}
+$$
+The mean process is defined by the six parameters $\{x_1, y_1, x_2, y_2, t_1, \Delta t\}$, where $x_k$ and $y_k$ are the coordinates of respective centroids ${\bf m}_k$.  The `marcher` package can estimate up to three range shifts.  
+
+## Ranging process
+
+The ranging term ${\bf r}(t)$ captures the spatial extent of the respective home ranges and features of the autocorrelation in the data. We consider several models for the ranging component, all of which are defined in continuous time, are spatially stationary, and can be meaningfully characterized by a typical area of use. The three possible ranging models are an uncorrelated two-dimensional white noise (WN), an Ornstein-Uhlenbeck position process (OU), which contains a first-order autocorrelation on the positions (see Dunn and Gipson 1977 and Blackwell 1997 for applications to animal home ranges), and a hierarchical Ornstein-Uhlenbeck velocity and position process (OUF) which additionally models autocorrelation in the velocities (Fleming et al. 2014).  All of these processes can be characterized with respect to a circular area within which observations are expected to occur with 95\% probability, which is the *ranging area* $A$. 
+
+## Summaries
+
+The range shift models, combining the mean and ranging components, are denoted:
+
+* Migratory white noise: $\text{MWN}({\bf \mu}, A)$ where $\bf \mu$ represents the mean process parameters described above;
+* Migratory Ornstein-Uhlenbeck: $\text{MOU}({\bf \mu}, A,\tau_z)$  where $\tau_z$ is the autocorrelation time scale of crossing the home range;
+* Migratory Ornstein-Uhlenbeck-Fleming: $\text{MOUF}({\bf \mu}, A,\tau_z,\tau_v)$ 
+where $\tau_v$ is the autocorrelation time scale of velocity.
+
+It is important to account for autocorrelations in modeling movements, and therefore a portion of any analysis is determining the appropriate level of autocorrelation, a step that is usually built-in in `marcher` packages.  In practice, range shifting phenomemon nearly always occur at a much longer time scale than any possible velocity autocorrelation, and the MOUF models is highly unlikely to be selected.  Selection of models is likelihood ratio or information criterion based. It is therefore important to keep track of the total number of parameters, which varies depending on the number of ranges and level of autocorrelation.  For example, a two-range MWN has 7 parameters to fit ($x_1, x_2, y_1, y_2, t_1, \Delta t, A$), compared to a three-stage MOUF with 13parameters. In a basic *range shift* test, fitted models are compared to straightforward  $\text{WN}(A)$, $\text{OU}(A,\tau_z)$, $\text{OUF}(A,\tau_z,\tau_v)$ models with 1, 2, and 3 parameters, respectively. 
+
+# Simulating range shift processes
+
+Loading the package:
+```{r, message=FALSE, warning=FALSE}
+library(marcher)
+```
+
+R will prompt the user to install necessary dependencies as needed. 
+
+
+Simulating a range shift is not usually a primary objective of analysis, but understanding the functions that make it possible helps make the estimation process and output more clear. Also, it provides us with several datasets to illustrate and experiment with. 
+
+The `simulate.shift` function requires a vector of times of observation, a two-column vector of means of the process, and a list of ranging parameters.  The mean of the process is first obtained by using the `getMu` function.  First, specify the times of observations:
+
+```{r}
+time <- 1:100
+```
+
+Next,  the mean process parameters - which must be a *named vector* (i.e., the order does not matter, but the names `x1`, `x2`, `y1`, `y2`, `t1`, `dt` are necessary.):
+
+
+```{r}
+mean.pars <- c(x1 = 0, y1 = 0, x2 = 10, y2 = 10, t1 = 45, dt = 10)
+```
+
+The `getMu()` function simulates the mean process, generating a two-column matrix of `x` and `y` coordinates:
+
+```{r}
+Mean <- getMu(T = time, p.m = mean.pars)
+```
+
+The `scan.track` function is a convenient function for viewing a track, scattering the process as x-y, time-x and time-y lines. Note the rapid 20 time unit migration:
+
+```{r MeanPlot, echo=-1, fig.height = 3}
+par(mar = c(2,4,0,2), oma = c(2,0,2,0), bty="l", xpd=NA)
+scan.track(time = time, x = Mean)
+```
+
+To simulate the complete range shift message, we need only specify the ranging parameters, which are the ranging area `A` and, if needed, values of the autocorrelation time scales (`tau_z` and `tau_v`). 
+
+```{r}
+taus <- c(tau.z = 1, tau.v = 0.5)
+area <- 50
+SimTrack <- simulate.shift(T = time, tau = taus, mu = Mean, A = area)
+```
+
+The simulation data frame containes three columns: 
+```{r}
+head(SimTrack)
+```
+
+Which are easily plotted with `scan.track`:
+```{r FirstSimTrack, echo=-1, fig.height = 4}
+par(mar = c(2,4,0,2), oma = c(2,0,2,0), bty="l", xpd=NA)
+with(SimTrack, scan.track(time= T, x = X, y = Y))
+```
+
+Note, the `scan.track()` function will also automatically make this plot to a three-column data frame with names "T","X" and "Y", so the above figure can be generated via: `scan.track(SimTrack)` as well.
+
+It is now quick and easy to compare models with more or less position and velocity autocorrelation (especially with the magic of `magrittr` piping!):
+
+```{r SimulatedTracks, echo=-1, fig.height = 3}
+par(bty="l"); set.seed(2015)
+MWN.sim <- simulate.shift(T = time, tau = NULL, mu = Mean, A = area) %T>% scan.track()
+title("No Autocorrelation: MWN", outer = TRUE)
+MOU.sim <- simulate.shift(T = time, tau = c(tau.z = 5), mu = Mean, A = area)  %T>% scan.track()
+title("Position Autocorrelation: MOU", outer = TRUE)
+MOUF.sim <- simulate.shift(T = time, tau = c(tau.z = 5, tau.v = 1), mu = Mean, A = area) %T>% scan.track
+title("Position and Velocity Autocorrelation: MOUF", outer = TRUE)
+```
+
+Note that these processes can be simulated at random or arbitrary times of observation, e.g:
+```{r, echo=-1, fig.height = 3}
+par(bty="l")
+
+time.random <- sort(runif(100,0,100))
+mean.random <- getMu(T = time.random, p.m = mean.pars)
+MOUF.sim.random <- simulate.shift(T = time.random, tau = c(tau.z = 5, tau.v = 2), mu = mean.random, A = area) %T>% scan.track;
+title("MOUF: random times", outer = TRUE)
+```
+
+This last version of data is perhaps the most difficult to estimate since it has two hierarchies of auto-correlation and irregular sampling.  
+
+Finally, a simulation with three ranges (two shifts), using the `getMu.multi` function to generate the mean process:
+
+```{r, echo=-1, fig.height = 3}
+	par(bty="l"); set.seed(2015)
+  p.m <- c(x1 = 0, x2 = 5, x3 = 10, y1 = 0, y2 = 5, y3 = 0, t1 = 40, t2 = 130, dt1 = 6, dt2 = 4)
+  A <- 20; T <- 1:200
+  Mu <- getMu.multi(T, p.m)
+  MOU.3range <- simulate.shift(T, tau=c(tau.z = 5), mu=Mu, A=A) %T>% scan.track
+	title("MOU: Three Ranges", outer = TRUE)
+```
+
+We now have five simulated data sets to estimate range shifts with.  Equivalent simulated tracks are stored in the `marcher` package, loaded via the command `data(SimulatedTracks)`.  
+
+# Estimating range shifts
+
+## ... in one line of code
+
+The key function for estimating range shifts is `estimate.shift`.  There are many options in this function, and different ways to optimize for a specific task (or help it from breaking down), with further explanations in sections below.  In the simplest implementation you simply run the function on time and location data:
+
+```{r examplefits}
+MWN.fit <- with(MWN.sim, estimate.shift(T=T, X=X, Y=Y))
+summary(MWN.fit)
+```
+
+The output can be visualized readily with the `plot.shiftfit` method:
+```{r PlotFit1, fig.height = 3, cache=TRUE, echo=-1}
+par(bty="l")
+plot(MWN.fit)
+```
+
+Note that in this visualization, the area circles are (dark to light) the 50% and 95% areas of use, whereas the dark and light blue lines in the time series figure reflect the confidence intervals around the estimated means, which are rather narrow. 
+
+Here is the same procedure applied to the three step process:
+
+```{r ThreeRangeFit, cache=TRUE, echo=-1, fig.height=3}
+par(bty="l"); set.seed(1976)
+with(MOU.3range, estimate.shift(T=T, X=X, Y=Y, n.clust = 3)) %>% plot
+```
+
+This is the most straightforward black-box application of the range shift estimation.  Below, we go into more detail as to the meaning of the output and the various way to specify the methods and models. 
+
+## Details of the output
+
+The fitted object is of a (`marcher` specific) `shiftfit` class object, the summary output of which provides a lot of useful information. Most obviously, all of the parameter estimates and confidence intervals (which should be pretty close to the true values) and the log-likelihood and AIC of the model.  A few important additional bits:
+
+1. Because we did not provide a ranging model, the algorithm did an AIC based selection and decided that the WN model is most suitable for the ranging (residuals).  The model can be specified with the `model` argument (one of "WN", "OU" or "OUF",  case insensitive).
+
+2. Because we did not provide initial parameter values (argument `p.m0` - a named list of parameter values), the algorithm used the `quickfit()` function to find centroids and reports those in the summary output (see below).  This generally works well enough for clear range shifts.  There are functions available to (interactively) simplify the process of selecting initial parameter value guesses. 
+
+3. Because we did not provide a method, the fit was performed using the AR equivalence for estimation (see paper for explanation).  This method is fast, but generally unsuitable for irregularly sampled data (unless the ranging model is white noise) and for OUF ranging models.  IN these cases, the maximum likelihood method is preferable. The method can be specified with the `method` argument (one of `ar` or `like` - also case insensitive). 
+
+
+## Seeding parameters
+
+Without initial mean parameter given, `estimate.shift` uses a simple k-means clustering to find two (or three) clusters in data to initialize the fitting with the `quickfit` function.  This function does a reasonable job at estimating the mid-point of the migrations from the clustering, but has no way of estimating the duration, which needs to be entered manually. 
+
+```{r quickfit1, echo=-1, cache=FALSE}
+par(bty="l")
+(p.m0 <- with(MWN.sim, quickfit(T,X,Y, dt = 1)))
+```
+
+The `quickfit` function will also generally work for three ranges:
+```{r quickfit2, echo=-1, cache=FALSE}
+par(bty="l"); set.seed(1979)
+(p.m0 <- with(MOU.3range, quickfit(T,X,Y, dt = 1, n.clust = 3)))
+```
+
+Because of the slightly cryptic operation of the `kmeans` function underlying `quickfit`, the three cluster is not quite as reliable as the two shift version, providing a slightly different result each time it is run.   Some supervision is always preferable. 
+
+A second option for obtaining initial parameter values is to use the `locate.shift` function, which uses R's interactive `locator` function and prompts the user to click on the track scan to obtain initial values.  Typically this works rather well:  
+
+```{r, eval=FALSE}
+(p.m0 <- with(MWN.fit, locate.shift(T,X,Y, dt = 1)))
+```
+
+In a typical workflow, if you'd like to seed your estimation with more reliable quesses than the `quickfit` values, you would just pass the output of `locate.shift` to the `p.m0` paramter of `estimate.shift`:
+
+```{r, eval=FALSE}
+estimate.shift(T, X, Y, p.m0 = p.m0)
+```
+
+## Residual analysis and autocorrelation model selection
+
+One of the outputs of the fitted model object is a vector of residuals.  These residuals capture all of the ranging behavior (and deviations from the migration track during migration).  It is in the analysis of these residuals that a ranging area and a selection between autocorrelation models (WN / OU / OUF) occurs.  
+
+Below, we visualize the three residual vectors from fits of the the three single-shift models.  Note that we prefer using the likelihood method for the `MOU` and `MOUF` simulations and - in order to speed up the fitting - we pre-assigned the fits to the white noise (MWN) model, since we are interested in analyzing the residuals. 
+
+```{r ThreeResidualFits, eval=TRUE, cache=FALSE, echo = -1, fig.height = 3}
+par(mfrow= c(1,3), bty="l", echo=-1)
+data(SimulatedTracks)
+MWN.res <- with(MWN.sim, estimate.shift(T, X, Y, model = "wn"))$Z.res
+MOU.res <- with(MOU.sim, estimate.shift(T, X, Y, model = "wn"))$Z.res
+MOUF.res <- with(MOUF.sim, estimate.shift(T, X, Y, model = "wn"))$Z.res
+
+plot(MWN.res, asp=1, type="o")
+plot(MOU.res, asp=1, type="o")
+plot(MOUF.res, asp=1, type="o")
+```
+
+These residuals all have similar spatial scales and circular symmatry, but the increasing autocorrelation in these residuals is visually quite clear. The `selectModel` function determines which model is most appropriate for each of these residuals:
+
+```{r selectModels, cache=TRUE}
+selectModel(MWN.res, T = MWN.sim$T, method = "like", showtable = TRUE)
+selectModel(MOU.res, T = MOU.sim$T, method = "like", showtable = TRUE)
+selectModel(MOUF.res, T = MOUF.sim$T, method = "like", showtable = TRUE)
+```
+
+These determinations (all of which happen to be correct) are made based on the reported AIC values. This function is run within the `estimate.shift` function by default, but most efficiently if you are analyzing multiple individuals sampled at similar rates, one determination (most commonly - OU or WN) is enough to apply to all individuals. 
+
+Once a model is selected, the `getTau` function estimates the values of the time scale parameters (if needed) 
+
+```{r estimateTaus, cache=TRUE}
+getTau(MOU.res, T = MOU.sim$T, model = "ou", CI = TRUE)[c("tau.hat","tau.CI")]
+getTau(MOUF.res, T = MOUF.sim$T, model = "ouf", CI = TRUE)[c("tau.hat","tau.CI")]
+```
+
+For the OUF, which is the most layered autocorrelated model, the estimates of the time scales can be rather imprecise, with wide confidence intervals, especially with relatively limited data. Estimating the velocity autocorrelation is a difficult task, and for most migration and range-shifting process, not particularly relevant because the process occurs at a time scale so much greater than any velocity autocorrelation scale. 
+
+A reminder: these functions all run under the hood of `estimate.shift`, but can be useful for exploring aspects of the data. 
+
+# Example with roe deer data
+
+## Entire track
+
+There is one deer, Michela, in the package:
+
+```{r Michela, cache = FALSE, echo=-1, fig.height = 3}
+par(bty="l")
+data(Michela)
+with(Michela, scan.track(time = time, x = x, y = y))
+```
+Over the period of study, between February 2005 and April 2006, there is a clear seasonal migration to a summering ground and a return.
+
+We can fit a three range model to the data. **Note:** *for the time being, the estimation routine can only handle numeric time objects.  Time data that are stored as POSIX (the standard time object) need to be converted to a unit like days or hours from an initial time.  For example, in the case of Michela, the `day` column was generated as:*
+```{r}
+# first day of first year
+day1 <- ymd(paste(min(year(Michela$time)), 1, 1))
+# find time difference and round (and make numeric)
+days <- as.numeric(round(difftime(Michela$time, day1, unit = "day")))
+```
+
+The initial guesses are best obtained using the interactive `locate.shift` function, which was used to obtain the values entered below. 
+
+```{r Michela.fit, cache = FALSE, fig.height = 3, echo = -1}
+par(bty="l")
+# p.m0 <- with(Michela, locate.shift(time = day, x = x, y = y, n.clust = 3))
+p.m0 <- c(x1 = 653.6,  x2 = 658.85, x3 = 653.8, 
+          y1 = 5094.8, y2 = 5096,   y3 = 5094.8, 
+					t1 = 118, t2 = 318, dt1 = 10.5, dt2 = 15.8)
+Michela.fit <- with(Michela, 
+							 estimate.shift(day, x, y, n.clust = 3, model = "ou", method = "like", p.m0 = p.m0))
+plot(Michela.fit)
+```
+
+The time variable here is day of year from January 1 of the first year of observation.  We can convert those results to dates using functions in `lubridate`:
+
+```{r message = FALSE, warning = FALSE}
+ymd("2005 1 1") + ddays(Michela.fit$p.hat[c('t1','t2')])
+```
+
+So the first migrations occurred on April 29 and lasted 6.9 days (95% CI 5.5-8.15), while the return migration occurred on November 17 and lasted about 5 days (3.9 - 6).  
+
+## First migration
+
+It appears from the figure above that Michela settled into the summer territory after first exploring a region a bit to the north.  We can fit the early stages of the migration as well as below:
+
+```{r FitMichelaEarly, fig.height = 3, echo = -1, cache=TRUE}
+par(bty="l")
+#  p.m0 <- with(subset(Michela, day < 200), locate.shift(time = day, x = x, y = y, n.clust = 3))
+p.m0 <- c(x1 = 653.6,  x2 = 659.13, x3 = 658.96, 
+          y1 = 5094.8, y2 = 5096.5,   y3 = 5095.9, 
+					t1 = 120.5, t2 = 138.7, dt1 = 4, dt2 = 4.7)
+Michela.fit.early <- with(subset(Michela, day < 200), 
+					estimate.shift(day, x, y, n.clust = 3, model = "ou", method = "like", p.m0 = p.m0))
+plot(Michela.fit.early)
+summary(Michela.fit.early)
+```
+
+Be will use both of these results to perform some hypothesis test in the next section.   Note, incidentally, that the time-scale of position auto-correlation of Michela's movements is about 1.2 days, indicating that her ranging movements occur, generally, over a time span greater than one day. 
+
+# Further statistics and hypothesis tests
+
+The likelihood formulation allows for several hypothesis tests to be performed.  These can be useful in cases where there are many individuals with some ambiguous cases and some criterion is necessary for classifying migration behavior.  
+
+## Migration distance and range shift index 
+
+Useful measures for quantifying a range shift are the distance between the centroids of the respective ranges, and the *range shift index* (RSI) as described in Gurarie et al. (*in press*).  This RSI is simply the ratio between the distance between ranges and the diameter of the 95% ranging area.  The function `getRSI` obtains this index (with confidence intervals) from a given fit.  Below, these statistics for Michela's first migration:
+
+```{r}
+getRSI(Michela.fit, 1, 2)
+```
+
+A distance of only 5.4 km, and a range shift index of 6.1.  Compare those with the return (which is nearly identical) and the difference between the first and final ranges:
+
+```{r}
+data.frame(FirstToSecond = getRSI(Michela.fit, 1,2)[,1],
+           SecondToThird= getRSI(Michela.fit, 2,3)[,1], 
+           FirstToThird = getRSI(Michela.fit, 1,3)[,1])
+```
+
+The results are unsurprising, but nice to quantify. 
+
+## Range shift test
+
+The RSI is, essentially, an ``effect'' size of a migration process.  A fundamental test of significance for a range shift is provided by comparing a model with and without migration.  As a relatively challenging example, we can take the randomly sampled MOUF simulation:
+
+```{r RangeShiftTestMOUF, echo=-1, fig.height = 3, cache=TRUE}
+rm(MOUF.sim.random); data(SimulatedTracks); par(bty="l")
+FIT <- with(MOUF.sim.random, estimate.shift(T, X, Y, method = "like", model = "ouf"))
+plot(FIT)
+```
+
+The `test.rangeshift` function takes a fitted range shift object and performs the test, outputting an AIC table as well:
+
+```{r MOUF.rangeshifttest, cache=TRUE}
+test.rangeshift(FIT)
+```
+
+Clearly, there is a significant shift, with a very small p-value.
+
+We contrast this with a range shift fit of the first 45 locations, where (as simulated) there shouldn't be a range shift at all. 
+
+```{r RangeShiftTestMOUF2, echo=-1, fig.height = 3, cache=TRUE}
+par(bty="l")
+FIT2 <- with(MOUF.sim.random[1:45,], estimate.shift(T, X, Y, method = "like", model = "ouf"))
+plot(FIT2)
+test.rangeshift(FIT2)
+```
+
+The output is unambiguous about there being no significant range shift in these data. 
+
+## Return test
+
+Michela performed what is most likely a return migration at the end of 2005 to what was her winter ranging grounds from the previous year.  This hypothesis can be tested by comparing the more complex fitted model of three ranges against a null model where the third range is the original range.  The `test.return` function does just that. 
+
+```{r ReturnTest, cache = FALSE}
+test.return(Michela.fit)
+```
+
+Note that the default for this test is the likelihood method, which is somewhat slower.  Very similar results are obtained using the AR equivalence, e.g.: `test.return(Michela.fit, method = 'ar')`
+
+## Stopover test
+
+In some cases, it might be interesting to know whether or not a stopover occurred, or if two of three potential ranges could "statistically" be pooled into one.  For example, in the second Michela example above, the second and third ranges were rather close to each other, and a two range model might be more parsimonious.  Note that the likelihood and the AIC of the three range model are:
+
+```{r MichelaAIC}
+c(logLik(Michela.fit.early), AIC(Michela.fit.early))
+```
+
+A fitted two range model for that subset yields:
+
+```{r Michela2b.aic}
+Michela.fit.early2 <- with(subset(Michela, day < 200), 
+					estimate.shift(day, x, y, n.clust = 2, model = "ou", method = "like"))
+c(logLik(Michela.fit.early2), AIC(Michela.fit.early2))
+```
+
+Clearly, the AIC of the three range model is much lower than the AIC of the two range model.  This process can be wrapped up into a single line of code:
+
+```{r Stopover.test}
+test.stopover(Michela.fit.early)
+```
+
+
+# Additional feature: net square displacement
+
+A net-squared displacement analysis (NSD analysis) is an alterantive method to characterize dispersal or range-shifting behavior.  We include a function (`fitNSD`) to fit a migration curve to a net-squared displacement, following the method outlined in Börger et al. (2012).  The method also tests for the significance of the displacement.  The example below is from the `fitNSD` help file. 
+
+```{r, fig.height = 3, echo = -1}
+par(bty="l")
+# set initial parameters
+A <- 20; T <- 1:100; tau <- c(tau.z = 2, tau.v = 0)
+
+# simulate, fit and test clear disperal
+Mu <- getMu(T, c(x1 = 0, y1 = 0, x2 = 4, y2 = 4, t1 = 40, dt = 20))
+XY.sim <- simulate.shift(T, tau = tau, Mu, A=A)
+with(XY.sim, scan.track(time = T, x = X, y = Y))
+with(XY.sim, fitNSD(T, X, Y, plotme=TRUE))
+
+
+# simulate, fit and test no disperal
+Mu <- getMu(T, c(x1 = 0, y1 = 0, x2 = 0, y2 = 0, t1 = 40, dt = 20))
+XY.sim <- simulate.shift(T, tau = tau, Mu, A=A)
+with(XY.sim, scan.track(time = T, x = X, y = Y))
+with(XY.sim, fitNSD(T,X,Y, plotme=TRUE))
+```
+
+The qq-plot diagnostics help confirm that the Gaussian model used to fit the square root of NSD sufficiently stabilized the variances around the ordinary least squares fit. 
+
+
+# References
+
+Blackwell, P. (1997) Random diffusion models for animal movement. *Ecological Modelling*, 100, 87-102.
+
+Börger, L. & Fryxell, J. (2012) Quantifying individual differences in dispersal using net squared displacement. *Dispersal Ecology and Evolution* (eds. J. Clobert, M. Baguette, T. Benton & J. Bullock), pp. 222-228. Oxford University Press, Oxford, UK.
+
+Dunn, J. & Gipson, P. (1977) Analysis of radio telemetry data in studies of home range. *Biometrics*, 33, 85-101.
+
+Fleming, C., Calabrese, J., Mueller, T., Olson, K., Leimgruber, P. & Fagan, W. (2014) Non-Markovian maximum likelihood estimation of autocorrelated movement processes. *Methods in Ecology and Evolution*, 5, 462-472.
+
+Gurarie, E., Francesca, C.,  Peters, W., Fleming, C., Calabrese, J., Müller, T., & Fagan, W. (in press) Whether, whither, when, and will it return? A framework for modeling animal range shifts and migrations. *Journal of Animal Ecology*. 
+
+```{r, echo=FALSE, eval=FALSE}
+require(rmarkdown)
+setwd("C:/Users/Elie/Box Sync/Rpackages/ecomove/marcher/vignettes")
+render("marcher.rmd", encoding = "UTF-8", html_document(toc = TRUE)); setwd("./")
+shell("marcher.html")
+require(knitr)
+purl("marcher.rmd")
+```
+

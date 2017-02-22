@@ -1,0 +1,28 @@
+\name{Michela}
+\alias{Michela}
+\docType{data}
+
+\title{Movement track of Michela, a roe deer}
+
+\description{GPS tracks of one roe deer (Capreolus capreolus) in the Italian alps. This deer performs two seasonal migrations, from a wintering ground to a summering ground, back its wintering ground.  For several ways to analyze these data, see examples in the \link{marcher} vignette.}
+
+\usage{data(Michela)}
+
+\format{Data frame containing movements of roe deer with the following columns:
+\describe{
+\item{id}{ID of animal}
+\item{name}{Names - for mnemonic convenience - of Italian authors.}
+\item{x,y}{In Easting Westing}
+\item{latitude, longitude}{}
+\item{time}{POSIXct object}
+\item{day}{Day of year, counting from January 1 of the first year of observations (thus day 367 is January 2 or the following year).}}
+}
+
+\examples{
+data(Michela)
+with(Michela, scan.track(time = time, x = x, y = y))
+}
+\keyword{datasets}
+\source{
+For more details, see: \url{Eurodeer.org}
+}

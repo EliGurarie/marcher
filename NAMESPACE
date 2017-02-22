@@ -1,0 +1,5 @@
+exportPattern("^[[:alpha:]]+")
+S3method(print, shiftfit)
+S3method(plot, shiftfit)
+S3method(AIC, shiftfit)
+S3method(logLik, shiftfit)

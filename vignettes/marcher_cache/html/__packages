@@ -1,0 +1,14 @@
+base
+rmarkdown
+plyr
+mvtnorm
+RColorBrewer
+lubridate
+minpack.lm
+zoo
+numDeriv
+Matrix
+magrittr
+marcher
+knitr
+devtools
