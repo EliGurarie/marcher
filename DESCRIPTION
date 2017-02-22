@@ -2,8 +2,8 @@ Package: marcher
 Type: Package
 Title: Migration and Range-CHange Estimation in R
 Version: 0.1
-Date: 2016-12-27
-Author: Eliezer Gurarie
+Date: 2017-02-22
+Author: Eliezer Gurarie and Farid Cheraghi
 Maintainer: Eliezer Gurarie <egurarie@umd.edu>
 Description: Tools for likelihood estimation and model selection for various two- and three-range shift models for animal movement data. The method is described in detail in: E.Gurarie, F. Cagnacci, C. Fleming, W. Peters, J.M. Calabrese, T. Müller and W. Fagan.  Whether, whither, when, and will it return?  A framework for modeling animal range shifts and migrations (in press) Journal of Animal Ecology. (It's pronounced "marshay!")
 License: Open
