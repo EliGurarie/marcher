@@ -70,7 +70,7 @@ title("MOUF: random times", outer = TRUE)
   MOU.3range <- simulate.shift(T, tau=c(tau.z = 5), mu=Mu, A=A) %T>% scan.track
 	title("MOU: Three Ranges", outer = TRUE)
 
-## ----examplefits, echo = -1----------------------------------------------
+## ----examplefits---------------------------------------------------------
 MWN.fit <- with(MWN.sim, estimate.shift(T=T, X=X, Y=Y))
 summary(MWN.fit)
 

@@ -169,7 +169,7 @@ We now have five simulated data sets to estimate range shifts with.  Equivalent 
 
 The key function for estimating range shifts is `estimate.shift`.  There are many options in this function, and different ways to optimize for a specific task (or help it from breaking down), with further explanations in sections below.  In the simplest implementation you simply run the function on time and location data:
 
-```{r examplefits, echo = -1}
+```{r examplefits}
 MWN.fit <- with(MWN.sim, estimate.shift(T=T, X=X, Y=Y))
 summary(MWN.fit)
 ```
