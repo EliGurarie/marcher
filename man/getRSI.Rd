@@ -17,4 +17,3 @@ returns a data frame reporting the distance traveled, the RSI and respective boo
 \description{
 The range shift index is a dimensionless measure of the distance of the centroids of two ranges divided by the diameter of the 95\% area. This function uses the 95\% confidence intervals from a range shift fit to calculate a point estimate and 95\% confidence intervals of the RSI.
 }
-

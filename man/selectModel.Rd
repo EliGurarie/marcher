@@ -89,4 +89,3 @@ lapply(Z.list, function(z) selectModel(z, T = T, method = "like", showtable = TR
 
 
 }
-

@@ -52,4 +52,3 @@ with(SimTrack, scan.track(T,X,Y))
 \seealso{
 \code{\link{getMu}}
 }
-

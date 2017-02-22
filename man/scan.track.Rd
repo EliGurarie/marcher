@@ -41,4 +41,3 @@ with(SimTrack, scan.track(time = T, x = X, y = Y))
 # OR (because SimTrack is a "track")
 scan.track(SimTrack)
 }
-

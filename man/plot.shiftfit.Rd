@@ -55,4 +55,3 @@ summary(MOU.3range.fit)
 plot(MOU.3range.fit)
 
 }
-

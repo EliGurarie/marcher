@@ -26,4 +26,3 @@ Plots an x-y, time-x, time-y track of a potential migration process and prompts 
 \seealso{
 \code{\link{quickfit}}, code{\link{locator}}
 }
-

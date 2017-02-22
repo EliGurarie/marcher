@@ -4,6 +4,8 @@
 \alias{test.rangeshift}
 \alias{test.return}
 \alias{test.stopover}
+\alias{test.return}
+\alias{test.stopover}
 \title{Range shift hypothesis tests}
 \usage{
 test.rangeshift(FIT, verbose = TRUE)

@@ -28,4 +28,3 @@ Compute predicted area at given alpha level (e.g. 50\% or 90\%) of a migration m
 \details{
 For sufficient data (i.e. where the range in the times is much greater than the ) This function estimates the (symmetric) 95\% area of use from a bivariate Gaussian
 }
-

@@ -3,3 +3,4 @@
 .RData
 Ruserdata
 vignettes/marcher_cache/
+*.Rproj

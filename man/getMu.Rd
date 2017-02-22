@@ -23,4 +23,3 @@ scan.track(T, getMu(T, p.m))
 \seealso{
 \code{\link{sim.mouf}}
 }
-

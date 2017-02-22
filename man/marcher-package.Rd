@@ -30,4 +30,3 @@ See the respective help files and \code{vignette("marcher")} for more details an
 \references{
 Gurarie, E., F. Cagnacci, W. Peters, C. Fleming, J. Calabrese, T. Mueller and W. Fagan (in review at Journal of Animal Ecology) Whether, whither, when, and will it return?  A framework for modeling animal range shifts and migrations.
 }
-

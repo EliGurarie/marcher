@@ -44,4 +44,3 @@ with(XY.sim, scan.track(time = T, x = X, y = Y))
 with(XY.sim, fitNSD(T,X,Y, plotme=TRUE))
 
 }
-

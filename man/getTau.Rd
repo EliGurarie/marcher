@@ -23,4 +23,3 @@ getTau(Z.res, T = T, model = c("wn", "ou", "ouf")[1], tau0 = NULL,
 \description{
 A mostly internal function that takes the "residuals" of a range-shift process and estimates \deqn{\tau_z} and, if necessary, \deqn{\tau_v}.
 }
-
