@@ -225,7 +225,7 @@ A second option for obtaining initial parameter values is to use the `locate.shi
 (p.m0 <- with(MWN.fit, locate.shift(T,X,Y, dt = 1)))
 ```
 
-In a typical workflow, if you'd like to seed your estimation with more reliable quesses than the `quickfit` values, you would just pass the output of `locate.shift` to the `p.m0` paramter of `estimate.shift`:
+In a typical workflow, if you'd like to seed your estimation with more reliable guesses than the `quickfit` values, you would just pass the output of `locate.shift` to the `p.m0` paramter of `estimate.shift`:
 
 ```{r, eval=FALSE}
 estimate.shift(T, X, Y, p.m0 = p.m0)
@@ -249,7 +249,7 @@ plot(MOU.res, asp=1, type="o")
 plot(MOUF.res, asp=1, type="o")
 ```
 
-These residuals all have similar spatial scales and circular symmatry, but the increasing autocorrelation in these residuals is visually quite clear. The `selectModel` function determines which model is most appropriate for each of these residuals:
+These residuals all have similar spatial scales and circular symmetry, but the increasing autocorrelation in these residuals is visually quite clear. The `selectModel` function determines which model is most appropriate for each of these residuals:
 
 ```{r selectModels, cache=TRUE}
 selectModel(MWN.res, T = MWN.sim$T, method = "like", showtable = TRUE)

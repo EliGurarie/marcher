@@ -281,6 +281,7 @@ par(bty="l")
 data(Michela)
 with(Michela, scan.track(time = time, x = x, y = y))
 ```
+
 Over the period of study, between February 2005 and April 2006, there is a clear seasonal migration to a summering ground and a return.
 
 We can fit a three range model to the data. **Note:** *for the time being, the estimation routine can only handle numeric time objects.  Time data that are stored as POSIX (the standard time object) need to be converted to a unit like days or hours from an initial time.  For example, in the case of Michela, the `day` column was generated as:*
@@ -328,7 +329,7 @@ plot(Michela.fit.early)
 summary(Michela.fit.early)
 ```
 
-Be will use both of these results to perform some hypothesis test in the next section.   Note, incidentally, that the time-scale of position auto-correlation of Michela's movements is about 1.2 days, indicating that her ranging movements occur, generally, over a time span greater than one day. 
+We will use both of these results to perform some hypothesis test in the next section.   Note, incidentally, that the time-scale of position auto-correlation of Michela's movements is about 1.2 days, indicating that her ranging movements occur, generally, over a time span greater than one day. 
 
 # Further statistics and hypothesis tests
 
