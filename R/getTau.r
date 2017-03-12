@@ -8,7 +8,7 @@
 #' @param tau0 initial values of parameter estimates - a named vector: \code{c(tau.z = tau0[1], tau.v = tau0[2])}
 #' @param method either \code{"like"} or \code{"ar"}.  The former refers to the likelihood method - it is most general (i.e. works with irregular sampling). The latter refers to the auto-rgressive model equivalence, which is faster but only works with regular sampling. 
 #' @param CI whether or not to compute the confidence intervals (temporarily only available for \code{like} method).
-
+#' @export
 
 getTau <- function(Z.res, T = T, model=c("wn", "ou", "ouf")[1], tau0 = NULL, CI = FALSE, method = c("like", "ar")[1]){
   Z.res <- Z.res-mean(Z.res)

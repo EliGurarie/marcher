@@ -1,13 +1,13 @@
 #' Obtain mean vector for a range shift process
 #' 
-#'  Obtain a mean vector for a movement with one (\code{getMu}) or more (\code{getMu.multi}) range shifts.  This function is mainly used within the likelihood of range shift processes, but is also useful for simulating processes.  
+#'  Obtain a mean vector for a movement with one (\code{getMu}) or more (\code{getMu_multi}) range shifts.  This function is mainly used within the likelihood of range shift processes, but is also useful for simulating processes.  
 #'  
 #' @param T vector of times
 #' @param p.m mean parameters. A named vector with elements t1, dt, x1, y1, x2, y2, for a single-shift process.  For multiple (n) shifts, the paramaters are numbered: (x1, x2 ... xn), (y1, y2 ... yn), (t1 .. t[n-1]), (dt1 ... dt[n-1]) 
-#' @aliases getMu.multi
-#' @seealso \code{\link{sim.mouf}}
-#' @example ./examples/getMu.example.r
-
+#' @aliases getMu_multi
+#' @seealso \code{\link{simulate_shift}}
+#' @example ./demo/getMu_example.r
+#' @export
 getMu <- function(T, p.m)
 {
     M.x <- ifelse(T <=  p.m["t1"], p.m["x1"], 
@@ -20,8 +20,8 @@ getMu <- function(T, p.m)
     return(cbind(x = M.x, y = M.y))
 }
 
-
-getMu.multi <- function(T, p.m){
+#' @export
+getMu_multi <- function(T, p.m){
   
   xs <- p.m[grep("x", names(p.m))] %>% as.vector
   ys <- p.m[grep("y", names(p.m))] %>% as.vector

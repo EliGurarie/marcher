@@ -1,8 +1,8 @@
 #' Range shift hypothesis tests
 #'
 #' Three tests for three hypotheses to test on fitted range shifts: Was the range shift significant?  Did an animal that performed two consecutive seasonal migrations return to the same location it began?  Was there a stopover during a migration? 
-#' @param FIT a fitted range shift (output of \code{\link{estimate.shift}})
-#' @param method one of "ar" or "like", for AR equivalence or likelihood method
+#' @param FIT a fitted range shift (output of \code{\link{estimate_shift}})
+#' @param verbose whether to print verbose message
 #' @return Outputs a summary of the test results and returns a list of test results including: 
 #' \itemize{
 #' \item{\code{aic.table}} {an AIC table comparing models}
@@ -11,10 +11,12 @@
 #' \item{\code{p.value}} {a p.value for the l.r.t.}
 #' }
 #' 
-#' @aliases test.rangeshift test.return test.stopover
+#' @aliases test_rangeshift test_return test_stopover
 
-#' @describeIn test.rangeshift Compare a two range fitted model to a null model of no range shift.
-test.rangeshift <- function(FIT, verbose = TRUE){
+#' @describeIn test_rangeshift Compare a two range fitted model to a null model of no range shift.
+#' @export
+test_rangeshift <- function(FIT, verbose = TRUE){
+  #method one of "ar" or "like", for AR equivalence or likelihood method
 	model <- FIT$model
 	method <- FIT$method
   p.hat <- FIT$p.hat
@@ -60,8 +62,9 @@ l.r.t.: ", signif(lrt,3), " with ", 4, " degrees of freedom, ",
 		invisible(list(aic.table = test.table,  lrt = lrt, df = 4, p.value = p.value))
  }
 
-#' @describeIn test.rangeshift Compares a three range fitted model in which the first and third ranges have the same centroid against a model where the first and third centroid are different.
-test.return <- function(FIT, verbose = TRUE){
+#' @describeIn test_rangeshift Compares a three range fitted model in which the first and third ranges have the same centroid against a model where the first and third centroid are different.
+#' @export
+test_return <- function(FIT, verbose = TRUE){
 
 	method <- FIT$method
 	X <- FIT$X
@@ -112,8 +115,9 @@ l.r.t.: ", signif(lrt,3), " with ", 4, " degrees of freedom, ",
 }
 
 
-#' @describeIn test.rangeshift Compare a three range model with an apparent stopover (shorter intermediate range), and see if a more parsimonious model excludes the stopover.
- test.stopover <- function(FIT, verbose = TRUE){
+#' @describeIn test_rangeshift Compare a three range model with an apparent stopover (shorter intermediate range), and see if a more parsimonious model excludes the stopover.
+#' @export
+ test_stopover <- function(FIT, verbose = TRUE){
 	
 	method <- FIT$method
 	p.hat <- FIT$p.hat
@@ -125,7 +129,7 @@ l.r.t.: ", signif(lrt,3), " with ", 4, " degrees of freedom, ",
   p.m0.null <- c(p.hat[c("t1", "dt1", "x1", "y1")], x2 = t(p.hat["x3"]), y2 = t(p.hat["y3"]))
 	names(p.m0.null)[names(p.m0.null) == "dt1"] <- "dt"
 		
-	FIT.nostopover	<- with(FIT, estimate.shift(T, X, Y, n.clust = 2, p.m0 = p.m0.null,
+	FIT.nostopover	<- with(FIT, estimate_shift(T, X, Y, n.clust = 2, p.m0 = p.m0.null,
 													CI = FALSE, model = model, method = method))
 	
 	test.table <- data.frame(ll = c(FIT.nostopover$ll, ll), 

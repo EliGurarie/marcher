@@ -2,12 +2,19 @@
 % Please edit documentation in R/getCov.R
 \name{getCov}
 \alias{getCov}
-\alias{getCov,}
-\alias{getArea,}
 \alias{mvrnorm2}
 \title{Estimation Helper Functions}
 \usage{
 getCov(t1, t2, model, p)
+}
+\arguments{
+\item{t1}{time 1}
+
+\item{t2}{time 2}
+
+\item{model}{the model}
+
+\item{p}{vector of the parameters}
 }
 \description{
 functions which provide the theoretical covariance [getCov()] and area [getArea()] for specific models and parameter values

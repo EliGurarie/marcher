@@ -4,7 +4,9 @@
 #' 
 #' @details This function does estimates the locations and times of migration, but not the duration (dt).  It is most useful for obtaining a "null" estimate for seeding the likelihood estimation. 
 #' 
-#' @param {T,X,Y} time, x and y coordinates of movement
+#' @param T time
+#' @param X x coordinate of movement
+#' @param Y y coordinate of movement
 #' @param dt duration of migration (arbitrarily = 1)
 #' @param n.clust number of clusters (2 or 3)
 #' @param plotme whether or not to plot the result
@@ -12,8 +14,8 @@
 #' \itemize{
 #' \item{if \code{n.clust = 2}} {returns \code{t1, dt, x1, y1, x2, y2}} 
 #' \item{if \code{n.clust = 3}} {returns \code{t1, dt1, t2, dt2, x1, y1, x2, y2, x3, y3} }}
-#' @example ./examples/quickfit.example.r
-#' 
+#' @example ./demo/quickfit_example.r
+#' @export
 quickfit <-  function(T,X,Y, dt=1, n.clust = 2, plotme=TRUE){
   clusterme <- cbind(X, Y)
   r.cl <- kmeans(clusterme, n.clust)

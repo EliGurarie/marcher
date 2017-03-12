@@ -5,14 +5,17 @@
 #' @details For sufficient data (i.e. where the range in the times is much greater than the ) This function estimates the (symmetric) 95\% area of use from a bivariate Gaussian 
 #' 
 #' @param p estimated mouf parameter vector (tau.z, tau.v, t1, dt, x1, y1, x2, y2)
-#' @param {T,X,Y} time and location data
+#' @param T time
+#' @param X x coordinate
+#' @param Y y coordinate
 #' @param alpha proportion of area used to be computed 
 #' @param model one of "wn", "ou", "ouf" - whether or not the velocity autocorrelation needs to be taken into account. 
-#' @param n.clust number of ranges
-#' @param method one of "nls" or "like"
 #' @param direct whether or not to compute the area directly (i.e. fitting a symmetric bivariate normal to the residuals) or to account for the autocorrelation.  The default behavior (NULL) computes directly for the "wn" model, and uses the autocorrelation (which is slower) only if the estmated spatial time scale is greater that 1/30 of the total time range. 
-
+#' @export
 getArea <- function(p, T, X, Y, alpha=0.95, model=c("wn", "ou", "ouf")[1], direct = NULL) {
+  #n.clust number of ranges
+  #method one of "nls" or "like"
+  
   directA <- function(Z.res){
     s2 <- (var(Re(Z.res)) + var(Im(Z.res)))/2
     z.p <- sqrt(-2 * log(0.05))
@@ -40,10 +43,10 @@ getArea <- function(p, T, X, Y, alpha=0.95, model=c("wn", "ou", "ouf")[1], direc
   
   tau <- p[c("tau.z","tau.v")]
 	p.m <- p[which(! names(p) %in% c("tau.z","tau.v"))]
-
+	
 	n.clust <- length(grep("x", names(p.m)))
 	
-	if(n.clust == 2) XY.hat <- getMu(T, p.m) else XY.hat <- getMu.multi(T, p.m) 
+	if(n.clust == 2) XY.hat <- getMu(T, p.m) else XY.hat <- getMu_multi(T, p.m) 
   Z.hat <- XY.hat[,1] + 1i*XY.hat[,2]
   Z <- X + 1i*Y 
   Z.res <- Z  - Z.hat

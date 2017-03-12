@@ -3,10 +3,10 @@
 #' Estimate likelihoods and AIC for several possible migration models. 
 #' 
 #' @param p initial parameters: [tau.z, tau.v, t1, t2, x1, x2, y1, y2]
-#' @param T,X,Y data
+#' @param T,X,Y time,x and y coordinates
 #' @param model "wn", "ou", "ouf", "mou" or "mouf",  - whether or not to estimate tau.v
-#' @aliases getLikelihood.res, getAIC.nls
-
+#' @aliases getLikelihood.res getAIC.nls
+#' @export
 getLikelihood <- function(p, T, X, Y, model = c('mouf', 'mou', 'mwn', 'ouf', 'ou', 'wn')[1])
 {
   # parameters of MOUF are: [log(tau.z), k.tau, t1, dt, x1, x2, y1, y2]
@@ -20,7 +20,7 @@ getLikelihood <- function(p, T, X, Y, model = c('mouf', 'mou', 'mwn', 'ouf', 'ou
 
   if(model %in% c("mouf", "mou", 'mwn')){
     p.m <- p[c("t1","dt","x1","y1","x2","y2")]
-    M <- getMu(T, p=p.m)
+    M <- getMu(T, p.m=p.m)
     Xt <- X - M[,1]
     Yt <- Y - M[,2]
   } else {
@@ -78,7 +78,7 @@ getAIC <- function(FIT, model = NULL, compute.null = TRUE)
   
   p.s <- p.hat[c("tau.z", "tau.v")]
   p.m <- p.hat[c("t1", "dt", "x1", "y1", "x2", "y2")]
-  Z.hat <- getMu(FIT$T, p.m, complex=TRUE)
+  Z.hat <- getMu(FIT$T, p.m)
   Z <- with(FIT, X + 1i*Y)
   Z.res <- Z - Z.hat
   

@@ -2,7 +2,7 @@
 % Please edit documentation in R/getMu.R
 \name{getMu}
 \alias{getMu}
-\alias{getMu.multi}
+\alias{getMu_multi}
 \title{Obtain mean vector for a range shift process}
 \usage{
 getMu(T, p.m)
@@ -13,13 +13,13 @@ getMu(T, p.m)
 \item{p.m}{mean parameters. A named vector with elements t1, dt, x1, y1, x2, y2, for a single-shift process.  For multiple (n) shifts, the paramaters are numbered: (x1, x2 ... xn), (y1, y2 ... yn), (t1 .. t[n-1]), (dt1 ... dt[n-1])}
 }
 \description{
-Obtain a mean vector for a movement with one (\code{getMu}) or more (\code{getMu.multi}) range shifts.  This function is mainly used within the likelihood of range shift processes, but is also useful for simulating processes.
+Obtain a mean vector for a movement with one (\code{getMu}) or more (\code{getMu_multi}) range shifts.  This function is mainly used within the likelihood of range shift processes, but is also useful for simulating processes.
 }
 \examples{
 T <- 1:100
 p.m <- c(x1 = 0, y1 = 0, x2 = 10, y2 = 20, t1 = 45, dt = 55)
-scan.track(T, getMu(T, p.m))
+scan_track(time = T, x=getMu(T, p.m))
 }
 \seealso{
-\code{\link{sim.mouf}}
+\code{\link{simulate_shift}}
 }

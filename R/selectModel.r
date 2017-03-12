@@ -7,8 +7,8 @@
 #' @param method One of 'ar' or 'like' - whether to use the AR equivalence (faster, but needs to be regular) or likelihood estimation.
 #' @param showtable whether to return the AIC values of the respective models
 #' @return A character string - \code{'wn'}, \code{'ou'} or \code{'ouf'}.  Optionally also the AIC table. 
-#' @example ./examples/selectModel.example.r
-
+#' @example ./demo/selectModel_example.r
+#' @export
 selectModel <- function(Z.res, T=NULL, method = c("ar", "like")[1], showtable = FALSE){
   method <- tolower(method)
   if(!(method %in% c("ar", "like")))

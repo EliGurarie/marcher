@@ -1,6 +1,9 @@
 .Rproj.user
 .Rhistory
 .RData
+*.Rproj
 Ruserdata
 vignettes/marcher_cache/
-*.Rproj
+vignettes/marcher_files/
+profile.out
+cran-comments.md

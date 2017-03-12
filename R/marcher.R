@@ -4,17 +4,17 @@
 #' 
 #' @details Some key functions for using \code{marcher} are:
 #' 
-#' 1. \code{\link{estimate.shift}} {Estimate a range shift process.}
+#' 1. \code{\link{estimate_shift}} {Estimate a range shift process.}
 #' 
-#' 2. \code{\link{simulate.shift}} {Simulate a range shift process.}
+#' 2. \code{\link{simulate_shift}} {Simulate a range shift process.}
 #' 
 #' 3. \code{\link{plot.shiftfit}} {Visualize a range shift process.}
 #' 
-#' 4. \code{\link{test.rangeshift}} {Test whether a range shift occurred.}
+#' 4. \code{\link{test_rangeshift}} {Test whether a range shift occurred.}
 #' 
-#' 5. \code{\link{test.return}} {Test whether a migration was a return migration.}
+#' 5. \code{\link{test_return}} {Test whether a migration was a return migration.}
 #' 
-#' 6. \code{\link{test.stopover}} {Test whether a stopover occurred during a migration.}
+#' 6. \code{\link{test_stopover}} {Test whether a stopover occurred during a migration.}
 #' 
 #' Several simulated datasets: \code{\link{SimulatedTracks}}.  One roe deer (Capreolus capreolus) track: \code{\link{Michela}}.
 #' 

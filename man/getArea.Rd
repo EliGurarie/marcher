@@ -10,17 +10,17 @@ getArea(p, T, X, Y, alpha = 0.95, model = c("wn", "ou", "ouf")[1],
 \arguments{
 \item{p}{estimated mouf parameter vector (tau.z, tau.v, t1, dt, x1, y1, x2, y2)}
 
+\item{T}{time}
+
+\item{X}{x coordinate}
+
+\item{Y}{y coordinate}
+
 \item{alpha}{proportion of area used to be computed}
 
 \item{model}{one of "wn", "ou", "ouf" - whether or not the velocity autocorrelation needs to be taken into account.}
 
 \item{direct}{whether or not to compute the area directly (i.e. fitting a symmetric bivariate normal to the residuals) or to account for the autocorrelation.  The default behavior (NULL) computes directly for the "wn" model, and uses the autocorrelation (which is slower) only if the estmated spatial time scale is greater that 1/30 of the total time range.}
-
-\item{{T, X, Y}}{time and location data}
-
-\item{n.clust}{number of ranges}
-
-\item{method}{one of "nls" or "like"}
 }
 \description{
 Compute predicted area at given alpha level (e.g. 50\% or 90\%) of a migration model fit

@@ -11,17 +11,17 @@ A collection of functions for performing a migration and range change analysis (
 \details{
 Some key functions for using \code{marcher} are:
 
-1. \code{\link{estimate.shift}} {Estimate a range shift process.}
+1. \code{\link{estimate_shift}} {Estimate a range shift process.}
 
-2. \code{\link{simulate.shift}} {Simulate a range shift process.}
+2. \code{\link{simulate_shift}} {Simulate a range shift process.}
 
 3. \code{\link{plot.shiftfit}} {Visualize a range shift process.}
 
-4. \code{\link{test.rangeshift}} {Test whether a range shift occurred.}
+4. \code{\link{test_rangeshift}} {Test whether a range shift occurred.}
 
-5. \code{\link{test.return}} {Test whether a migration was a return migration.}
+5. \code{\link{test_return}} {Test whether a migration was a return migration.}
 
-6. \code{\link{test.stopover}} {Test whether a stopover occurred during a migration.}
+6. \code{\link{test_stopover}} {Test whether a stopover occurred during a migration.}
 
 Several simulated datasets: \code{\link{SimulatedTracks}}.  One roe deer (Capreolus capreolus) track: \code{\link{Michela}}.
 
@@ -29,4 +29,20 @@ See the respective help files and \code{vignette("marcher")} for more details an
 }
 \references{
 Gurarie, E., F. Cagnacci, W. Peters, C. Fleming, J. Calabrese, T. Mueller and W. Fagan (in review at Journal of Animal Ecology) Whether, whither, when, and will it return?  A framework for modeling animal range shifts and migrations.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/EliGurarie/marcher/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Eliezer Gurarie \email{egurarie@umd.edu}
+
+Authors:
+\itemize{
+  \item Farid Cheraghi
+}
+
 }

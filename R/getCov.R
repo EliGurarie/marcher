@@ -2,11 +2,16 @@
 #' 
 #' functions which provide the theoretical covariance [getCov()] and area [getArea()] for specific models and parameter values
 #' 
+#' @param t1 time 1
+#' @param t2  time 2
+#' @param model the model
+#' @param p vector of the parameters
+#'
 #' @details \code{getCov(t1, t2, model, p)} calculates the covariance matrix for different models. \code{mvrnorm2} is a slightly more efficient multivariate normal function. 
 #' 
 #' 
-#' @aliases getCov, getArea, mvrnorm2
-
+#' @aliases getCov mvrnorm2
+#' @export
 getCov <- function(t1, t2, model, p){
   dt <- abs(t1-t2)
   if(model == "wn")  # p = variance
@@ -18,6 +23,7 @@ getCov <- function(t1, t2, model, p){
   stop("No such model!")
 }
 
+#' @export
 mvrnorm2 <- function (n = 1, mu, Sigma, tol = 1e-06, empirical = FALSE) 
 {
   p <- length(mu)

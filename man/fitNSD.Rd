@@ -7,13 +7,17 @@
 fitNSD(T, X, Y, plotme = FALSE, setpar = TRUE, ...)
 }
 \arguments{
+\item{T}{time}
+
+\item{X}{x coordinate}
+
+\item{Y}{y coordinate}
+
 \item{plotme}{whether or not to plot the result}
 
 \item{setpar}{whether or not to run par(mfrow = c(1,2)) before plotting}
 
 \item{...}{additional parameters to pass to \code{plot}}
-
-\item{{T, X, Y}}{times and coordinates of data}
 }
 \value{
 a list with a vector of four parameter estimates, and a vector with test statistics (likelihood, AIC and p.values)
@@ -22,7 +26,7 @@ a list with a vector of four parameter estimates, and a vector with test statist
 Test range shift using net-squared displacement
 }
 \details{
-The test below assumes that the net squared displacement (NSD) for a migrating organism is well characterized by the logistic formula: E(NSD(t)) =  a / (1 + exp [(b-t)/c] as described in Borger and Fryxell (2012).  In practice, the square root of the NSD, i.e., the linear displacement, is fitted to the square root of the formula assuming Gaussian residuals with constant variance 's'.  A likelihood ratio test against a null model of no-dispersal is provided at a 95\% significance level.
+The test below assumes that the net squared displacement (NSD) for a migrating organism is well characterized by the logistic formula: E(NSD(t)) =  a / (1 + exp [(b-t)/c] as described in border=ger and Fryxell (2012).  In practice, the square root of the NSD, i.e., the linear displacement, is fitted to the square root of the formula assuming Gaussian residuals with constant variance 's'.  A likelihood ratio test against a null model of no-dispersal is provided at a 95\% significance level.
 }
 \examples{
 # simulate and compare two range shifts 
@@ -32,15 +36,15 @@ tau <- c(tau.z = 2, tau.v = 0)
 
 # large disperal
 Mu <- getMu(T, c(x1 = 0, y1 = 0, x2 = 4, y2 = 4, t1 = 40, dt = 20))
-XY.sim <- simulate.shift(T, tau = tau, Mu, A=A)
-with(XY.sim, scan.track(time = T, x = X, y = Y))
+XY.sim <- simulate_shift(T, tau = tau, Mu, A=A)
+with(XY.sim, scan_track(time = T, x = X, y = Y))
 with(XY.sim, fitNSD(T, X, Y, plotme=TRUE))
 
 
 # no disperal
 Mu <- getMu(T, c(x1 = 0, y1 = 0, x2 = 0, y2 = 0, t1 = 40, dt = 20))
-XY.sim <- simulate.shift(T, tau = tau, Mu, A=A)
-with(XY.sim, scan.track(time = T, x = X, y = Y))
+XY.sim <- simulate_shift(T, tau = tau, Mu, A=A)
+with(XY.sim, scan_track(time = T, x = X, y = Y))
 with(XY.sim, fitNSD(T,X,Y, plotme=TRUE))
 
 }

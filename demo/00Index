@@ -1,0 +1,6 @@
+estimate_shift_example		demo script for estimating shift range
+fitNSD_example		demo script to fit net square displacement
+getMu_example		demo script for computing and plotting Mu
+quickfit_example	script for testing quickfit function
+selectModel_example			demo script for model selection
+simulate_shift_example		script for data simulation

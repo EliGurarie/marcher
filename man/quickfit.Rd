@@ -7,13 +7,17 @@
 quickfit(T, X, Y, dt = 1, n.clust = 2, plotme = TRUE)
 }
 \arguments{
+\item{T}{time}
+
+\item{X}{x coordinate of movement}
+
+\item{Y}{y coordinate of movement}
+
 \item{dt}{duration of migration (arbitrarily = 1)}
 
 \item{n.clust}{number of clusters (2 or 3)}
 
 \item{plotme}{whether or not to plot the result}
-
-\item{{T, X, Y}}{time, x and y coordinates of movement}
 }
 \value{
 a named vector of initial estimates: 
@@ -31,36 +35,32 @@ This function does estimates the locations and times of migration, but not the d
 require(marcher)
 
 ## Load simulated data
-	data(SimulatedTracks)
-  
-	# plot the MOU simulation
-	scan.track(MOU.sim)
-	
-  # quick fit - setting dt = 10
-  (pm.0 <- with(MOU.sim, quickfit(T, X, Y, dt = 10)))
-	
-	# interactive locator process
-	**## Not run:** 
-	(with(MOU.sim, locate.shift(T, X, Y))
-	## End(**Not run**)
-	
-	# fit the model
-  fit <- with(myMouf, estimate.shift(T, X, Y))
-  
+data(SimulatedTracks)
+
+# plot the MOU simulation
+scan_track(MOU.sim)
+
+# quick fit - setting dt = 10
+(pm.0 <- with(MOU.sim, quickfit(T, X, Y, dt = 10)))
+
+# interactive locator process
+#' \dontrun{
+#'  (with(MOU.sim, locate_shift(T, X, Y)))
+#' }
+
+# fit the model
+fit <- with(MOU.sim, estimate_shift(T, X, Y))
 
 ## Three cluster example
-	
-	# plot the three range shift simulation
-	scan.track(MOU.3range)
- 
-	# quick fit 
-	## (note - this may not always work!)
-  with(MOU.3range, quickfit(T, X, Y, dt = 10, n.clust = 3))
-	
-	**## Not run:** 
-	with(MOU.3range, locate.shift(T, X, Y, n.clust = 3))
-	## End(**Not run**)
-	
-  
-  
+
+# plot the three range shift simulation
+scan_track(MOU.3range)
+
+# quick fit 
+## (note - this may not always work!)
+with(MOU.3range, quickfit(T, X, Y, dt = 10, n.clust = 3))
+
+#' \dontrun{
+#' with(MOU.3range, locate_shift(T, X, Y, n.clust = 3))
+#' }
 }
