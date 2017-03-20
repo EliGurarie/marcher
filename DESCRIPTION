@@ -6,7 +6,7 @@ Authors@R: c(person("Eliezer", "Gurarie", role = c("aut", "cre"), email = "egura
 Description: This package contains a set of tools for likelihood estimation and model selection for various 
   two- and three-range shift models for animal movement data. The method is described 
   in detail in: E.Gurarie, F. Cagnacci, C. Fleming, W. Peters, J.M. Calabrese, T. Muller and W. Fagan.  
-  Whether, whither, when, and will it return?  A framework for modeling animal range shifts and migrations (in press) Journal of Animal Ecology. It's pronounced "marshay!".
+ A framework for modeling range shifts and migrations: Asking whether, whither, when, and will it return (in press) Journal of Animal Ecology. It's pronounced "marshay!".
 License: GPL-2
 Depends:
     R (>= 3.3.0)

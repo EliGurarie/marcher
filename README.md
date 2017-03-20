@@ -8,4 +8,4 @@ The vignette introduces the family of range shift models and illustrates methods
 
 # References
 
-Gurarie, E., Francesca, C.,  Peters, W., Fleming, C., Calabrese, J., Müller, T., & Fagan, W. (in press) Whether, whither, when, and will it return? A framework for modeling animal range shifts and migrations. *Journal of Animal Ecology*. 
+Gurarie, E., Francesca, C.,  Peters, W., Fleming, C., Calabrese, J., Müller, T., & Fagan, W. (in press) A framework for modeling range shifts and migrations: Asking whether, whither, when, and will it return. *Journal of Animal Ecology*. 
