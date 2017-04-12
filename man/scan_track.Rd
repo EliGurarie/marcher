@@ -5,7 +5,7 @@
 \title{scan_track}
 \usage{
 scan_track(track = NULL, time, x, y = NULL, layout = NULL,
-  auto.par = NULL, ...)
+  auto.par = NULL, col = 1, alpha = 0.5, cex = 0.5, ...)
 }
 \arguments{
 \item{track}{a \code{track} class object, or any data-frame that contains (at least) three columns labeled "T", "X" and "Y"}
@@ -19,6 +19,12 @@ scan_track(track = NULL, time, x, y = NULL, layout = NULL,
 \item{layout}{the default layout places the x-y plot on the left and the respective 1-d time series on the right.}
 
 \item{auto.par}{by default, uses a decent looking default layout.  Otherwise can be a \code{\link{par}} list, or, e.g. FALSE to keep externally defined settings.}
+
+\item{col}{color vector t}
+
+\item{alpha}{intensity of the color}
+
+\item{cex}{character expansion of the points}
 
 \item{...}{options to be passed to plot functions}
 }

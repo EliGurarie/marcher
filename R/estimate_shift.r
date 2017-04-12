@@ -26,7 +26,6 @@
 #' @aliases estimate.mouf.nls getP.nls geMu.nls
 #' @example ./demo/estimate_shift_example.r
 #' @export
-#' 
 estimate_shift <- function(T, X, Y, n.clust = 2,  
                            p.m0 = NULL, dt0=min(5, diff(range(T))/20),  
                            method = c("ar","like")[1], CI=TRUE, 

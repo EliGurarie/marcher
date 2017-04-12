@@ -44,9 +44,9 @@ scan_track(MOU.sim)
 (pm.0 <- with(MOU.sim, quickfit(T, X, Y, dt = 10)))
 
 # interactive locator process
-#' \dontrun{
-#'  (with(MOU.sim, locate_shift(T, X, Y)))
-#' }
+if(interactive()){
+ (with(MOU.sim, locate_shift(T, X, Y)))
+}
 
 # fit the model
 fit <- with(MOU.sim, estimate_shift(T, X, Y))
@@ -60,7 +60,7 @@ scan_track(MOU.3range)
 ## (note - this may not always work!)
 with(MOU.3range, quickfit(T, X, Y, dt = 10, n.clust = 3))
 
-#' \dontrun{
-#' with(MOU.3range, locate_shift(T, X, Y, n.clust = 3))
-#' }
+if(interactive()){
+  with(MOU.3range, locate_shift(T, X, Y, n.clust = 3))
+}
 }
