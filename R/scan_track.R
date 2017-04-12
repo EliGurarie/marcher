@@ -8,8 +8,10 @@
 #' @param y y coordinate. 
 #' @param layout the default layout places the x-y plot on the left and the respective 1-d time series on the right. 
 #' @param auto.par by default, uses a decent looking default layout.  Otherwise can be a \code{\link{par}} list, or, e.g. FALSE to keep externally defined settings.
-#' @param ... options to be passed to plot functions
-#' 
+#' @param col color vector t
+#' @param alpha intensity of the color
+#' @param cex character expansion of the points
+#' @param ... options to be passed to plot functions 
 #' @examples
 #' 
 #' ## Roe deer data
@@ -29,7 +31,7 @@
 #' scan_track(SimTrack)
 #' @export
 
-scan_track <- function(track=NULL, time, x, y=NULL, layout = NULL, auto.par = NULL, ...)
+scan_track <- function(track=NULL, time, x, y=NULL, layout = NULL, auto.par = NULL, col=1, alpha=0.5, cex=0.5, ...)
 {
   if(inherits(track, "track") | all(c("T","X","Y") %in% names(track))){
     time <- track[['T']]
@@ -41,7 +43,10 @@ scan_track <- function(track=NULL, time, x, y=NULL, layout = NULL, auto.par = NU
   if(is.null(auto.par)) par(mar = c(0,4,0,0), oma = c(4,0,4,4), xpd = NA)  else 
     par(auto.par)
   
-  plot(x,y,asp=1, type="o", pch=19, col=rgb(0,0,0,.5), cex=0.5, ...)
-  plot(time,x, type="o", pch=19, col=rgb(0,0,0,.5), xaxt="n", xlab="", cex=0.5, ...)
-  plot(time,y, type="o", pch=19, col=rgb(0,0,0,.5), cex=0.5, ...)
+  plot(x,y,asp=1, type="o", pch=19, col=scales::alpha(col,alpha), cex=cex, ...)
+  lines(x,y)
+  plot(time,x, type="o", pch=19, col=scales::alpha(col,alpha), xaxt="n", xlab="", cex=cex, ...)
+  lines(time,x)
+  plot(time,y, type="o", pch=19, col=scales::alpha(col,alpha), cex=cex, ...)
+  lines(time,y)
 }
