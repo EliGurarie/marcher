@@ -16,7 +16,9 @@
 #' 
 #' 6. \code{\link{test_stopover}} {Test whether a stopover occurred during a migration.}
 #' 
-#' Several simulated datasets: \code{\link{SimulatedTracks}}.  One roe deer (\emph{Capreolus capreolus}) track: \code{\link{Michela}}.
+#' Several simulated datasets are in the \code{\link{SimulatedTracks}} data object.  
+#' 
+#' One roe deer (\emph{Capreolus capreolus}) track is in the \code{\link{Michela}} object.
 #' 
 #' See the respective help files and \code{vignette("marcher")} for more details and examples. 
 #' 
