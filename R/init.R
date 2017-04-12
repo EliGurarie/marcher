@@ -9,4 +9,5 @@
 #' @import minpack.lm
 #' @import numDeriv
 #' @import magrittr
+#' @importFrom scales alpha
 NULL

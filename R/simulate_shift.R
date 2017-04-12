@@ -33,8 +33,8 @@ simulate_shift <- function (T, tau = NULL, mu, A) {
   
   tau.v <- tau["tau.v"]
   tau.z <- tau["tau.z"]
-  if(is.null(tau.v)) tau.v <- 0 else if(is.na(tau.v)) tau.v <- 0 
-  if(is.null(tau.z)) tau.z <- 0 else if(is.na(tau.z)) tau.z <- 0 
+  if(is.null(tau.v) || is.na(tau.v)) tau.v <- 0
+  if(is.null(tau.z) || is.na(tau.z)) tau.z <- 0
   
   model <- "mouf"
   if(tau.v == 0) model <- "ou" 

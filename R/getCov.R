@@ -5,7 +5,7 @@
 #' @param t1 time 1
 #' @param t2  time 2
 #' @param model the model
-#' @param p vector of the parameters
+#' @param p vector of the auto-correlation parameters i.e. p = c(tau.z, tau.v)
 #'
 #' @details \code{getCov(t1, t2, model, p)} calculates the covariance matrix for different models. \code{mvrnorm2} is a slightly more efficient multivariate normal function. 
 #' 
@@ -18,7 +18,7 @@ getCov <- function(t1, t2, model, p){
     return(as.numeric(dt == 0)) else
   if(model %in% c("ou","mou")) # p = tau
     return(exp(-dt/p["tau.z"])) else
-  if(model %in% c("ouf", "mouf")) # p = c(tau.z, tau.u)
+  if(model %in% c("ouf", "mouf")) # p = c(tau.z, tau.v)
     return((p["tau.v"]*exp(-dt/p["tau.v"])-p["tau.z"]*exp(-dt/p["tau.z"]))/(p["tau.v"]-p["tau.z"])) else
   stop("No such model!")
 }
