@@ -6,7 +6,7 @@
 \alias{marcher-package}
 \title{Migration and Range Change Analysis in R}
 \description{
-A collection of functions for performing a migration and range change analysis (MRSA) as described in by Gurarie et al. (in press).  The key features are estimation of precise times, distances, and locations of a one or two step range shift in movement data.
+A collection of functions for performing a migration and range change analysis (MRSA) as described in by Gurarie et al. (2017).  The key features are estimation of precise times, distances, and locations of a one or two step range shift in movement data.
 }
 \details{
 Some key functions for using \code{marcher} are:
@@ -28,7 +28,7 @@ Several simulated datasets: \code{\link{SimulatedTracks}}.  One roe deer (Capreo
 See the respective help files and \code{vignette("marcher")} for more details and examples.
 }
 \references{
-Gurarie, E., F. Cagnacci, W. Peters, C. Fleming, J. Calabrese, T. Mueller and W. Fagan (in review at Journal of Animal Ecology) Whether, whither, when, and will it return?  A framework for modeling animal range shifts and migrations.
+Gurarie, E., F. Cagnacci, W. Peters, C. Fleming, J. Calabrese, T. Mueller and W. Fagan (2017)  A framework for modeling range shifts and migrations: asking whether, whither, when, and will it return. \emph{Journal of Animal Ecology}. DOI: 10.1111/1365-2656.12674
 }
 \seealso{
 Useful links:
