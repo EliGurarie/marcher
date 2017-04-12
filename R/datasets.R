@@ -1,6 +1,6 @@
 #' Movement track of Michela, a roe deer
 #'
-#' GPS tracks of one roe deer (Capreolus capreolus) in the Italian alps. 
+#' GPS tracks of one roe deer (\emph{Capreolus capreolus}) in the Italian alps. 
 #' This deer performs two seasonal migrations, from a wintering ground to a summering ground, 
 #' back its wintering ground.  For several ways to analyze these data, see examples in the 
 #' \link{marcher} vignette.
