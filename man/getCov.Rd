@@ -14,7 +14,7 @@ getCov(t1, t2, model, p)
 
 \item{model}{the model}
 
-\item{p}{vector of the parameters}
+\item{p}{vector of the auto-correlation parameters i.e. p = c(tau.z, tau.v)}
 }
 \description{
 functions which provide the theoretical covariance [getCov()] and area [getArea()] for specific models and parameter values

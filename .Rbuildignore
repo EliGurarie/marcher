@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^profile.out$
 ^cran-comments.md$
+^\R\autonomous.R$
+^\R2
