@@ -18,7 +18,8 @@ Imports:
     minpack.lm,
     zoo,
     numDeriv,
-    magrittr
+    magrittr,
+    scales
 VignetteBuilder: knitr
 BugReports: https://github.com/EliGurarie/marcher/issues
 RoxygenNote: 6.0.1
