@@ -3,7 +3,7 @@ Type: Package
 Title: Migration and Range Change Estimation in R
 Version: 0.0-2
 Authors@R: c(person("Eliezer", "Gurarie", role = c("aut", "cre"), email = "egurarie@umd.edu"), person("Farid", "Cheraghi", role = "aut"))
-Description: A set of tools for likelihood-based estimation, model selection and testing of two- and three-range shift and migration models for animal movement data as described in Gurarie et al. (2017) <doi: 10.1111/1365-2656.12674>.  Provided movement data (X, Y and Time), including irregularly sampled data, functions estimate the time, duration and location of one or two range shifts, as well as the ranging area and auto-correlation structure of the movment.  Tests assess, for example, whether the shift was "significant", and whether a two-shift migration was a true return migration.
+Description: A set of tools for likelihood-based estimation, model selection and testing of two- and three-range shift and migration models for animal movement data as described in Gurarie et al. (2017) <doi: 10.1111/1365-2656.12674>.  Given movement data (X, Y, Time) the package contains functions that estimate the time, duration and location of one or two range shifts, as well as the ranging area and auto-correlation structure of the movement.  Fitted migration models can be visualized. The movement data, itself, can be irregularly sampled. Additional tests assess, for example, whether the shift was "significant", and whether after two-shifts, an animal returned to its original range.
 License: GPL-2
 Depends:
     R (>= 3.3.0)

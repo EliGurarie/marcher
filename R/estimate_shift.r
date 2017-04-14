@@ -23,7 +23,6 @@
 #' \item{model}{One of "wn", "ou" or "ouf" - the selected model for the residuals.}
 #' \item{hessian}{The hessian of the mean parameters.}
 #' 
-#' @aliases estimate.mouf.nls getP.nls geMu.nls
 #' @example ./demo/estimate_shift_example.r
 #' @export
 estimate_shift <- function(T, X, Y, n.clust = 2,  
