@@ -67,9 +67,16 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
   p.mu.hat <- p.mu.fit$par
   
   dts <- grep("dt", names(p.mu.hat))
-  if(any(p.mu.hat[dts] < 0)){
-    p.mu.fit <- getP.mu(T, X, Y, p.m0, FUN = FUN, hessian = TRUE, bounds=TRUE)
-    p.mu.hat <- p.mu.fit$par
+  
+  if(length(dts) < n.clust - 1){
+    alldts <- paste0("dt", 1:(n.clust - 1))
+    dt.hats <- p.mu.hat[grep("dt",names(p.mu.hat))]
+    dt.present <- names(dt.hats)
+    dt.absent <- alldts[!(alldts %in% dt.present)]
+    dt.hats <- c(dt.hats, rep(0, n.clust - 1 - length(dt.hats)))
+    names(dt.hats) <- c(dt.present, dt.absent)
+    dt.hats <- dt.hats[order(names(dt.hats))]
+    p.mu.hat <- c(p.mu.hat[!grepl("dt", names(p.mu.hat))], dt.hats)
   }
   
   XY.hat <- FUN(T, p.mu.hat)
@@ -124,8 +131,8 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
     if(n.clust == 2) 
       p.mu.sd <- try(sqrt(1/diag(hessian))) else {	
 			#try(sqrt(diag(solve(hessian)))) else {	
-        which.xy <-	c(grep("x", names(p.mu.hat)), grep("y", names(p.mu.hat)))
-        which.t <-	grep("t", names(p.mu.hat))
+        which.xy <-	c(grep("x", colnames(hessian)), grep("y", colnames(hessian)))
+        which.t <-	grep("t", colnames(hessian))
         p.mu.sd <- try(sqrt( c(diag(solve(hessian[which.xy, which.xy])), 1/diag(hessian[which.t,which.t]))))
       }
     
@@ -135,13 +142,19 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
       zeros <- which(diag(hessian) == 0)		
       p.mu.sd[-zeros] <- sqrt(diag(solve(hessian[-zeros,-zeros])))
     }
+    
     if(any(is.na(p.mu.sd))){
       warning(cat("Can't obtain some confidence intervals - most likely because the migration time is too fast.\n"))
       p.mu.sd[is.na(p.mu.sd)] <- 0
     }
     
+    # check to see if all dt's are available 
+    p.mu.sd.df <- gtools::smartbind(data.frame(t(p.mu.hat)),
+              data.frame(t(p.mu.sd)))[2,] 
+    p.mu.sd <- as.vector(t(p.mu.sd.df))
+    names(p.mu.sd) <- names(p.mu.sd.df) 
+    
     # obtain variance parameters
-		
 		tau.bs <- matrix(ncol = length(tau.hat), nrow = nboot)
 		
     if(model == "wn") tau.withCI <- NULL
@@ -224,7 +237,7 @@ AIC.shiftfit <- function(object,...) object$aic
 #' @export
 logLik.shiftfit <- function(object,...) object$ll
 
-
+#' @export
 computeAIC <- function(ll, model, n.clust){
   if(model %in% c("mouf","ouf")) k.s <- 3 else
     if(model %in% c("mou","ou")) k.s <- 2 else 
@@ -234,7 +247,8 @@ computeAIC <- function(ll, model, n.clust){
       return(c(aic = -2*ll + 2*(k.s + k.m), df = k.s + k.m))
 }
 
-getP.mu <- function(T,X,Y,p.m0, FUN = getMu, hessian = TRUE, bounds = TRUE){
+#' @export
+getP.mu <- function(T,X,Y,p.m0, FUN = getMu, hessian = TRUE, bounds = FALSE){
   getL.nls <- function(p.m, T, X, Y, FUN){
     Mu <- FUN(T, p.m)
     sum(c(X - Mu[,1], Y - Mu[,2])^2)
@@ -244,20 +258,14 @@ getP.mu <- function(T,X,Y,p.m0, FUN = getMu, hessian = TRUE, bounds = TRUE){
   ys <- grep("y", names(p.m0))
   dts <- grep("dt", names(p.m0))
   ts <- (1:length(p.m0))[-c(xs,ys,dts)]
-  
-  if(!bounds) fit <- try(optim(p.m0, getL.nls, T=T, X=X, Y=Y, hessian=hessian, FUN = FUN)) else {
-    upper <- p.m0*0
-    lower <- p.m0*0
-    
-    lower[xs] <- min(X)
-    lower[ys] <- min(Y)
-    lower[ts] <- min(T)
-    lower[dts] <- 0
-    upper[xs] <- max(X)
-    upper[ys] <- max(Y)
-    upper[ts] <- max(T)
-    upper[dts] <- diff(range(T))
-    fit <- try(optim(p.m0, getL.nls, T=T, X=X, Y=Y, hessian=hessian, FUN = FUN, method="L-BFGS-B", lower = lower, upper = upper))
+ 
+  fit <- try(optim(p.m0, getL.nls, T=T, X=X, Y=Y, hessian=hessian, FUN = FUN))
+  if(any(fit$par[dts] < 0)){
+    names(which(fit$par[dts] < 0))
+    p.m02 <- p.m0      
+    p.m02 <- p.m0[c(xs, ys, ts, dts[fit$par[dts] > 0])]
+    fit <- try(optim(p.m02, getL.nls, T=T, X=X, Y=Y, hessian=hessian, FUN = FUN))
   }
+   
   fit
 }
