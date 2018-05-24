@@ -5,8 +5,10 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{marcher}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -223,7 +225,7 @@ Because of the slightly cryptic operation of the `kmeans` function underlying `q
 A second option for obtaining initial parameter values is to use the `locate_shift` function, which uses R's interactive `locator` function and prompts the user to click on the track scan to obtain initial values.  Typically this works rather well:  
 
 ```{r, eval=FALSE}
-(p.m0 <- with(MWN.fit, locate_shift(T,X,Y, dt = 1)))
+(p.m0 <- with(MWN.fit, locate_shift(T,X,Y)))
 ```
 
 In a typical workflow, if you'd like to seed your estimation with more reliable guesses than the `quickfit` values, you would just pass the output of `locate_shift` to the `p.m0` paramter of `estimate_shift`:
