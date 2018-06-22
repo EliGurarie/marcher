@@ -29,6 +29,7 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
                            p.m0 = NULL, dt0=min(5, diff(range(T))/20),  
                            method = c("ar","like")[1], CI=TRUE, 
                            nboot = 100, model = NULL, 
+                           time.units = "day",
                            area.direct = NULL)
 {
   method <- tolower(method)
@@ -36,6 +37,9 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
   n <- length(T)
   hessian <- NULL
   use.quickfit <- FALSE
+  
+  if("POSIXt" %in% is(T))
+    T <- difftime(T, T[1], units = time.units) %>% as.numeric
   
   if(is.null(p.m0)){ 
     p.m0 <- try(quickfit(T,X,Y, dt=dt0, n.clust = n.clust, plotme=FALSE))
