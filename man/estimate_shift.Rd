@@ -6,7 +6,7 @@
 \usage{
 estimate_shift(T, X, Y, n.clust = 2, p.m0 = NULL, dt0 = min(5,
   diff(range(T))/20), method = c("ar", "like")[1], CI = TRUE, nboot = 100,
-  model = NULL, area.direct = NULL)
+  model = NULL, time.units = "day", area.direct = NULL)
 }
 \arguments{
 \item{T}{time}
@@ -51,6 +51,8 @@ data(SimulatedTracks)
 
 # white noise fit
 MWN.fit <- with(MWN.sim, estimate_shift(T=T, X=X, Y=Y))
+# estimate_shift also works with POSIX class time. The following also works
+MWN.fit <- with(MWN.sim, estimate_shift(T=strptime(MWN.sim$T,"\%j", tz = "UTC"), X=X, Y=Y))
 summary(MWN.fit)
 plot(MWN.fit)
 
