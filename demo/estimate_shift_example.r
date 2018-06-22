@@ -3,6 +3,8 @@ data(SimulatedTracks)
 
 # white noise fit
 MWN.fit <- with(MWN.sim, estimate_shift(T=T, X=X, Y=Y))
+# estimate_shift also works with POSIX class time. The following also works
+MWN.fit <- with(MWN.sim, estimate_shift(T=strptime(MWN.sim$T,"%j", tz = "UTC"), X=X, Y=Y))
 summary(MWN.fit)
 plot(MWN.fit)
 
