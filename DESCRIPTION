@@ -3,7 +3,7 @@ Type: Package
 Title: Migration and Range Change Estimation in R
 Version: 0.0-2
 Date: 2016-11-22
-Authors@R: c(person("Eliezer", "Gurarie", role = c("aut", "cre"), email = "egurarie@umd.edu"), person("Faridedin", "Cheraghi", role = "aut"))
+Authors@R: c(person("Eliezer", "Gurarie", role = c("aut", "cre"), email = "egurarie@umd.edu"), person("Faridedin", "Cheraghi", role = "ctb"))
 Description: A set of tools for likelihood-based estimation, model selection and testing of two- and three-range shift and migration models for animal movement data as described in Gurarie et al. (2017) <doi: 10.1111/1365-2656.12674>.  Provided movement data (X, Y and Time), including irregularly sampled data, functions estimate the time, duration and location of one or two range shifts, as well as the ranging area and auto-correlation structure of the movment.  Tests assess, for example, whether the shift was "significant", and whether a two-shift migration was a true return migration.
 License: GPL-2
 Depends:
@@ -20,7 +20,8 @@ Imports:
     zoo,
     numDeriv,
     magrittr,
-    scales
+    scales,
+    gtools,
 VignetteBuilder: knitr
 BugReports: https://github.com/EliGurarie/marcher/issues
 RoxygenNote: 6.0.1

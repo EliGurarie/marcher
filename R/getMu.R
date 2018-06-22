@@ -28,6 +28,13 @@ getMu_multi <- function(T, p.m){
   dt <- p.m[grep("dt", names(p.m))] %>% as.vector
   
   n.shifts <- length(xs) - 1
+  if(length(dt) < n.shifts){
+   dt.names <- paste0("dt",1:n.shifts) 
+   dts <- c(p.m[grep("dt", names(p.m))], rep(0, n.shifts - length(dt)))
+   names(dts)[dts == 0] <- dt.names[!dt.names %in% names(dts)]
+   dt <- dts[order(names(dts))] %>% as.vector
+  }
+  
   t.starts <- p.m[paste0("t",1:n.shifts)] %>% as.vector
   t.ends <- t.starts + dt
   

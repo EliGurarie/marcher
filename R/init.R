@@ -10,4 +10,5 @@
 #' @import numDeriv
 #' @import magrittr
 #' @importFrom scales alpha
+#' @importFrom gtools smartbind
 NULL

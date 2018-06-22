@@ -2,14 +2,11 @@
 % Please edit documentation in R/estimate_shift.r
 \name{estimate_shift}
 \alias{estimate_shift}
-\alias{estimate.mouf.nls}
-\alias{getP.nls}
-\alias{geMu.nls}
 \title{Estimating range shifts}
 \usage{
 estimate_shift(T, X, Y, n.clust = 2, p.m0 = NULL, dt0 = min(5,
   diff(range(T))/20), method = c("ar", "like")[1], CI = TRUE, nboot = 100,
-  model = NULL, time.units = "day", area.direct = NULL)
+  model = NULL, area.direct = NULL)
 }
 \arguments{
 \item{T}{time}

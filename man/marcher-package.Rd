@@ -42,9 +42,9 @@ Useful links:
 \author{
 \strong{Maintainer}: Eliezer Gurarie \email{egurarie@umd.edu}
 
-Authors:
+Other contributors:
 \itemize{
-  \item Faridedin Cheraghi
+  \item Faridedin Cheraghi [contributor]
 }
 
 }
