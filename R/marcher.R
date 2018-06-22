@@ -23,5 +23,13 @@
 #' See the respective help files and \code{vignette("marcher")} for more details and examples. 
 #' 
 #' @references Gurarie, E., F. Cagnacci, W. Peters, C. Fleming, J. Calabrese, T. Mueller and W. Fagan (2017)  A framework for modeling range shifts and migrations: asking whether, whither, when, and will it return. \emph{Journal of Animal Ecology}. DOI: 10.1111/1365-2656.12674 
-
+#' @seealso 
+#' Useful links:
+#' \itemize{
+#'  \item Report bugs at \url{https://github.com/EliGurarie/marcher/issues}
+#' }
+#' @author \strong{Maintainer}: Eliezer Gurarie \email{egurarie@umd.edu}
+#' 
+#' Other contributors:
+#' \itemize{\item Faridedin Cheraghi [contributor]}
 "_PACKAGE"
