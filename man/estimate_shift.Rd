@@ -5,8 +5,9 @@
 \title{Estimating range shifts}
 \usage{
 estimate_shift(T, X, Y, n.clust = 2, p.m0 = NULL, dt0 = min(5,
-  diff(range(T))/20), method = c("ar", "like")[1], CI = TRUE, nboot = 100,
-  model = NULL, time.units = "day", area.direct = NULL)
+  diff(range(T))/20), method = c("ar", "like")[1], CI = TRUE,
+  nboot = 100, model = NULL, time.units = "day",
+  area.direct = NULL)
 }
 \arguments{
 \item{T}{time}

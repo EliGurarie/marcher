@@ -33,6 +33,10 @@
 
 scan_track <- function(track=NULL, time, x, y=NULL, layout = NULL, auto.par = NULL, col=1, alpha=0.5, cex=0.5, ...)
 {
+  
+  par.init <- par(no.readonly = TRUE)
+  on.exit(par(par.init))
+  
   if(inherits(track, "track") | all(c("T","X","Y") %in% names(track))){
     time <- track[['T']]
     x <- track[['X']]

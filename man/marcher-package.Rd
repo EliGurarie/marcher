@@ -35,7 +35,7 @@ Gurarie, E., F. Cagnacci, W. Peters, C. Fleming, J. Calabrese, T. Mueller and W.
 \seealso{
 Useful links:
 \itemize{
-\item Report bugs at \url{https://github.com/EliGurarie/marcher/issues}
+ \item Report bugs at \url{https://github.com/EliGurarie/marcher/issues}
 }
 }
 \author{

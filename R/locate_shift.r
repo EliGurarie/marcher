@@ -14,6 +14,9 @@
 #' @export
 locate_shift <- function(time, x, y, n.clust = 2, ...){
   
+  par.init <- par(no.readonly = TRUE)
+  on.exit(par(par.init))
+  
   layout(rbind(c(1,2), c(1,3)))
 
   if(n.clust == 2){

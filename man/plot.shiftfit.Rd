@@ -4,14 +4,17 @@
 \alias{plot.shiftfit}
 \title{Plot results of an range-shift fit}
 \usage{
-\method{plot}{shiftfit}(x, ns = c(n.sims = 1000, n.times = 100, n.bins = 10),
-  plot.ts = TRUE, stretch = 0, pt.cex = 0.8, pt.col = "antiquewhite",
-  CI.cols = NULL, layout = NULL, par = NULL, ...)
+\method{plot}{shiftfit}(x, bars = FALSE, bar.params = c(n.sims = 1000,
+  n.times = 100, n.bins = 10), plot.ts = TRUE, stretch = 0,
+  pt.cex = 0.8, pt.col = "antiquewhite", CI.cols = NULL,
+  layout = NULL, par = NULL, ...)
 }
 \arguments{
 \item{x}{a fitted range shift object, i.e. output of the \code{\link{estimate_shift}}}
 
-\item{ns}{a vector of 3 simulation values, useful for smoothing the bars in the dumbbell plot.  For smoothing, it might be recommended to increase the first value, \code{n.sims} - the number of draws from the fitted migation process.}
+\item{bars}{whether or not to draw "bars" - i.e. estiamtes of the range shift corridor (these are often poorly rendered and are a work in process)}
+
+\item{bar.params}{a vector of 3 simulation values, useful for smoothing the bars in the dumbbell plot.  For smoothing, it might be recommended to increase the first value, \code{n.sims} - the number of draws from the fitted migation process.}
 
 \item{plot.ts}{whether or not to plot the time series as well}
 
