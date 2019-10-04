@@ -453,7 +453,7 @@ Dunn, J. & Gipson, P. (1977) Analysis of radio telemetry data in studies of home
 
 Fleming, C., Calabrese, J., Mueller, T., Olson, K., Leimgruber, P. & Fagan, W. (2014) Non-Markovian maximum likelihood estimation of autocorrelated movement processes. *Methods in Ecology and Evolution*, 5, 462-472.
 
-Gurarie, E., Francesca, C.,  Peters, W., Fleming, C., Calabrese, J., Müller, T., & Fagan, W. (in press) Whether, whither, when, and will it return? A framework for modeling animal range shifts and migrations. *Journal of Animal Ecology*. 
+Gurarie, E., Francesca, C.,  Peters, W., Fleming, C., Calabrese, J., Müller, T., & Fagan, W. (2017) Whether, whither, when, and will it return? A framework for modeling animal range shifts and migrations. *Journal of Animal Ecology*, 86(4):943-59.
 
 ```{r, echo=FALSE, eval=FALSE}
 require(rmarkdown)
