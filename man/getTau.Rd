@@ -4,8 +4,14 @@
 \alias{getTau}
 \title{Compute time scale parameters}
 \usage{
-getTau(Z.res, T = T, model = c("wn", "ou", "ouf")[1], tau0 = NULL,
-  CI = FALSE, method = c("like", "ar")[1])
+getTau(
+  Z.res,
+  T = T,
+  model = c("wn", "ou", "ouf")[1],
+  tau0 = NULL,
+  CI = FALSE,
+  method = c("like", "ar")[1]
+)
 }
 \arguments{
 \item{Z.res}{complex vector of isotropic Gaussian, possibly autocorrelated time series of points}

@@ -4,10 +4,20 @@
 \alias{estimate_shift}
 \title{Estimating range shifts}
 \usage{
-estimate_shift(T, X, Y, n.clust = 2, p.m0 = NULL, dt0 = min(5,
-  diff(range(T))/20), method = c("ar", "like")[1], CI = TRUE,
-  nboot = 100, model = NULL, time.units = "day",
-  area.direct = NULL)
+estimate_shift(
+  T,
+  X,
+  Y,
+  n.clust = 2,
+  p.m0 = NULL,
+  dt0 = min(5, diff(range(T))/20),
+  method = c("ar", "like")[1],
+  CI = TRUE,
+  nboot = 100,
+  model = NULL,
+  time.units = "day",
+  area.direct = NULL
+)
 }
 \arguments{
 \item{T}{time}
@@ -16,19 +26,26 @@ estimate_shift(T, X, Y, n.clust = 2, p.m0 = NULL, dt0 = min(5,
 
 \item{Y}{y coordinate}
 
-\item{n.clust}{the number of ranges to estimate.  Two is relatively easy and robust, and three works fairly will (with good initial guesses).  More can be prohibitively slow.}
+\item{n.clust}{the number of ranges to estimate.  Two is relatively easy and robust, 
+and three works fairly will (with good initial guesses).  More can be prohibitively slow.}
 
-\item{p.m0}{initial parameter guesses - a named vector with (e.g.) elements x1, x2, y1, y2, t1, dt.  It helps if this is close - the output of \code{\link{quickfit}} can be helpful, as can plotting the curve and using \code{\link{locator}}. If left as NULL, the function will make some guesses for you - starting with \code{quickfit}.}
+\item{p.m0}{initial parameter guesses - a named vector with (e.g.) elements x1, x2, y1, y2, t1, dt.
+It helps if this is close - the output of \code{\link{quickfit}} can be helpful, as can plotting 
+the curve and using \code{\link{locator}}. If left as NULL, the function will make some guesses 
+for you - starting with \code{quickfit}.}
 
 \item{dt0}{initial guess for duration of migration}
 
-\item{method}{one of `ar` or `like` (case insenstive), whether or not to use the AR equivalence method (faster, needs regular data - with some tolerance for gaps) or Likelihood method, which is slower but robust for irregular data.}
+\item{method}{one of `ar` or `like` (case insenstive), whether or not to use the AR equivalence 
+method (faster, needs regular data - with some tolerance for gaps) or Likelihood method, which is 
+slower but robust for irregular data.}
 
 \item{CI}{whether or not to estimate confidence intervals}
 
 \item{nboot}{number of bootstraps}
 
-\item{model}{one of "MWN", "MOU" or "MOUF" (case insensitive).  By default, the algorithm selects the best one according to AIC using the \code{\link{selectModel}} function.}
+\item{model}{one of "MWN", "MOU" or "MOUF" (case insensitive).  By default, the algorithm selects 
+the best one according to AIC using the \code{\link{selectModel}} function.}
 
 \item{area.direct}{passed as direct argument to getArea}
 }
@@ -44,7 +61,10 @@ a list with the following elements
 Estimation and helper functions for nls fit of migration model
 }
 \details{
-This algorithm minimizes the square of the distance of the locations from a double-headed hockeystick curve, then estimates the times scale using the ARMA/AR models.  Confidence intervals are obtained by bootstrapping the data and reestimating. See example and vignette for implementation.
+This algorithm minimizes the square of the distance of the locations 
+from a double-headed hockeystick curve, then estimates the times scale using the ARMA/AR models.  
+Confidence intervals are obtained by bootstrapping the data and reestimating. 
+See example and vignette for implementation.
 }
 \examples{
 # load simulated tracks

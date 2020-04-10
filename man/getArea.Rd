@@ -4,8 +4,15 @@
 \alias{getArea}
 \title{Compute area}
 \usage{
-getArea(p, T, X, Y, alpha = 0.95, model = c("wn", "ou", "ouf")[1],
-  direct = NULL)
+getArea(
+  p,
+  T,
+  X,
+  Y,
+  alpha = 0.95,
+  model = c("wn", "ou", "ouf")[1],
+  direct = NULL
+)
 }
 \arguments{
 \item{p}{estimated mouf parameter vector (tau.z, tau.v, t1, dt, x1, y1, x2, y2)}

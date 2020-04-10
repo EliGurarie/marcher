@@ -4,8 +4,18 @@
 \alias{scan_track}
 \title{scan_track}
 \usage{
-scan_track(track = NULL, time, x, y = NULL, layout = NULL,
-  auto.par = NULL, col = 1, alpha = 0.5, cex = 0.5, ...)
+scan_track(
+  track = NULL,
+  time,
+  x,
+  y = NULL,
+  layout = NULL,
+  auto.par = NULL,
+  col = 1,
+  alpha = 0.5,
+  cex = 0.5,
+  ...
+)
 }
 \arguments{
 \item{track}{a \code{track} class object, or any data-frame that contains (at least) three columns labeled "T", "X" and "Y"}

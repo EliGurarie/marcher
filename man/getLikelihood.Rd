@@ -6,8 +6,13 @@
 \alias{getAIC.nls}
 \title{Estimate likelihoods and AICs}
 \usage{
-getLikelihood(p, T, X, Y, model = c("mouf", "mou", "mwn", "ouf", "ou",
-  "wn")[1])
+getLikelihood(
+  p,
+  T,
+  X,
+  Y,
+  model = c("mouf", "mou", "mwn", "ouf", "ou", "wn")[1]
+)
 }
 \arguments{
 \item{p}{initial parameters: [tau.z, tau.v, t1, t2, x1, x2, y1, y2]}

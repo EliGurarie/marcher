@@ -4,8 +4,7 @@
 \alias{selectModel}
 \title{Select residual model}
 \usage{
-selectModel(Z.res, T = NULL, method = c("ar", "like")[1],
-  showtable = FALSE)
+selectModel(Z.res, T = NULL, method = c("ar", "like")[1], showtable = FALSE)
 }
 \arguments{
 \item{Z.res}{complex vector of residuals}
