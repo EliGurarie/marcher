@@ -48,8 +48,11 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
   hessian <- NULL
   use.quickfit <- FALSE
   
-  if("POSIXt" %in% is(T) | "Date" %in% is(T))
+  if("POSIXt" %in% is(T) | "Date" %in% is(T)){
+    T.POSIX <- T
     T <- difftime(T, T[1], units = time.units) %>% as.numeric
+    is.POSIX <- TRUE
+  } else is.POSIX <- FALSE
   
   if(is.null(p.m0)){ 
     p.m0 <- try(quickfit(T,X,Y, dt=dt0, n.clust = n.clust, plotme=FALSE))
@@ -129,7 +132,23 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
   p.hat <- c(tau.hat, p.mu.hat)
   A <- getArea(p.hat,T,X,Y, model=model, direct = area.direct)
   
+  if(is.POSIX){
+    t.hat <- p.hat[paste0("t", 1:(n.clust-1))] 
+    t.hat.POSIX <- min(T.POSIX) + lubridate::duration(t.hat, units = time.units)
+    names(t.hat.POSIX) <- names(t.hat)
+
+    t.start <- t.hat.POSIX
+    dts <- p.hat[grepl("dt", names(p.hat))]
+    t.end <- t.start + lubridate::duration(dts, units = time.units)
+    
+    shifttimes.POSIX <- data.frame(start = lubridate::round_date(t.start, time.units),
+                 end = lubridate::round_date(t.end, time.units),
+                 duration = round(t.end - t.start))
+    
+  } else shifttimes.POSIX = NULL
+  
   mrsa.fit <- list(p.hat = c(A = A$A.hat, p.hat), 
+                   shifttimes.POSIX = shifttimes.POSIX, 
                     model = model, 
                     ll=c(ll=ll), aic = aic['aic'], df = aic['df'],
                     method = method,
@@ -137,7 +156,11 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
                     rangemodel.given = rangemodel.given,
                     p.m0 = p.m0, 
                     use.quickfit = use.quickfit,
-                    X=X, Y=Y, T=T, Z.res=Z.res)	
+                    X=X, Y=Y, T=T, 
+                    T.POSIX = ifelse(is.POSIX, T.POSIX, NULL),
+                    time.units = ifelse(is.POSIX, T.POSIX, time.units),
+                    Z.res=Z.res,
+                    is.POSIX = is.POSIX)
   
   if(CI) {
     # obtain mean parameters
@@ -207,7 +230,6 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
     }
     
     p.mu.CI <-  cbind(p.mu.hat, p.mu.hat - 1.96*p.mu.sd, p.mu.hat + 1.96*p.mu.sd)
-    
     p.CI <- rbind(A = c(A$A.hat, A$A.hat + c(-1.96,1.96) * A$A.se), 
                   tau.withCI, 
                   p.mu.CI) %>% data.frame 
@@ -234,14 +256,17 @@ print.shiftfit <- function(x, ...){
         cat(paste0(n.clust, " ranges (", n.clust-1, " shifts) fitted using the ", toupper(method), " method.\n")) 
    if(use.quickfit){ 
      cat("Initial shift parameters obtained from `quickfit`:\n") 
-     print(signif(p.m0, 4),...)}
-       
+     print(signif(p.m0, 4), ...)}
    if(!rangemodel.given) 
      cat(paste0("The AIC-selected ranging model is ", toupper(model), ".\n\n")) else
        cat(paste0("The fitted ranging model is ", toupper(model), ".\n\n"))
     
     cat("Parameter Estimates:\n")
     if(!("p.CI" %in% names(x))) print(t(p.hat),...) else print(p.CI,...)
+    if(x$is.POSIX){
+      cat("\nEstimates of range-shift timing:\n")
+      print(x$shifttimes.POSIX)
+    }
     cat(paste0("\nlog-likelihood: ", signif(ll,4), "; AIC: ", signif(aic,4), "; degrees of freedom: ", signif(df,4), "\n"))
   })
   invisible(x)

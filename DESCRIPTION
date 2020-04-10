@@ -22,6 +22,7 @@ Imports:
     magrittr,
     scales,
     gtools,
+    lubridate
 VignetteBuilder: knitr
 BugReports: https://github.com/EliGurarie/marcher/issues
 RoxygenNote: 7.0.2
