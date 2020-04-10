@@ -2,19 +2,29 @@
 #' 
 #' Estimation and helper functions for nls fit of migration model
 #' 
-#' @details This algorithm minimizes the square of the distance of the locations from a double-headed hockeystick curve, then estimates the times scale using the ARMA/AR models.  Confidence intervals are obtained by bootstrapping the data and reestimating. See example and vignette for implementation. 
+#' @details This algorithm minimizes the square of the distance of the locations 
+#' from a double-headed hockeystick curve, then estimates the times scale using the ARMA/AR models.  
+#' Confidence intervals are obtained by bootstrapping the data and reestimating. 
+#' See example and vignette for implementation. 
 #'
 #' @param T time
-#' @param n.clust the number of ranges to estimate.  Two is relatively easy and robust, and three works fairly will (with good initial guesses).  More can be prohibitively slow. 
-#' @param p.m0 initial parameter guesses - a named vector with (e.g.) elements x1, x2, y1, y2, t1, dt.  It helps if this is close - the output of \code{\link{quickfit}} can be helpful, as can plotting the curve and using \code{\link{locator}}. If left as NULL, the function will make some guesses for you - starting with \code{quickfit}. 
+#' @param n.clust the number of ranges to estimate.  Two is relatively easy and robust, 
+#' and three works fairly will (with good initial guesses).  More can be prohibitively slow. 
+#' @param p.m0 initial parameter guesses - a named vector with (e.g.) elements x1, x2, y1, y2, t1, dt.  
+#' It helps if this is close - the output of \code{\link{quickfit}} can be helpful, as can plotting 
+#' the curve and using \code{\link{locator}}. If left as NULL, the function will make some guesses 
+#' for you - starting with \code{quickfit}. 
 #' @param dt0 initial guess for duration of migration
-#' @param method one of `ar` or `like` (case insenstive), whether or not to use the AR equivalence method (faster, needs regular data - with some tolerance for gaps) or Likelihood method, which is slower but robust for irregular data.
+#' @param method one of `ar` or `like` (case insenstive), whether or not to use the AR equivalence 
+#' method (faster, needs regular data - with some tolerance for gaps) or Likelihood method, which is 
+#' slower but robust for irregular data.
 #' @param CI whether or not to estimate confidence intervals
 #' @param nboot number of bootstraps 
 #' @param X x coordinate
 #' @param Y y coordinate
 #' @param area.direct passed as direct argument to getArea
-#' @param model one of "MWN", "MOU" or "MOUF" (case insensitive).  By default, the algorithm selects the best one according to AIC using the \code{\link{selectModel}} function.
+#' @param model one of "MWN", "MOU" or "MOUF" (case insensitive).  By default, the algorithm selects 
+#' the best one according to AIC using the \code{\link{selectModel}} function.
 #'
 #' @return a list with the following elements
 #' \item{T,X,Y}{Longitude coordinate with NA at prediction times} 
@@ -38,7 +48,7 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
   hessian <- NULL
   use.quickfit <- FALSE
   
-  if("POSIXt" %in% is(T))
+  if("POSIXt" %in% is(T) | "Date" %in% is(T))
     T <- difftime(T, T[1], units = time.units) %>% as.numeric
   
   if(is.null(p.m0)){ 
@@ -47,7 +57,8 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
   }
   
   if(inherits(p.m0, "try-error")){
-    warning("Having a hard time guessing initial centroids using k-means clustering. Going to take a wild guess, but you should consider providing guesses.\n")
+    warning("Having a hard time guessing initial centroids using k-means clustering. \n
+            I'm going to take a wild guess, but you should consider providing guesses.\n")
     if(n.clust == 2)
       p.m0 <- c(t1 = round((T[n]-T[1])*0.5+T[1]), dt = mean(diff(T))*2, x1 = X[1], y1 = Y[1], x2 = X[n], y2 = Y[n]) 
     if(n.clust == 3)
@@ -57,7 +68,8 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
                 dt2 = mean(diff(T))*2, 
                 x1 = X[1], y1 = Y[1], 
                 x2 = X[n], y2 = Y[n])
-    if(n.clust > 3) stop("Scratch that. You're going to have to provide some decent guesses if you really want to fit more than 3 ranges at once.")
+    if(n.clust > 3) stop("Scratch that. You're going to have to provide some decent guesses\n 
+                         if you really want to fit more than 3 ranges at once.")
   }
   
   ##################################################
