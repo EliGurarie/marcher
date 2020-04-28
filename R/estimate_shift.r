@@ -157,11 +157,14 @@ estimate_shift <- function(T, X, Y, n.clust = 2,
                     p.m0 = p.m0, 
                     use.quickfit = use.quickfit,
                     X=X, Y=Y, T=T, 
-                    T.POSIX = ifelse(is.POSIX, T.POSIX, NULL),
-                    time.units = ifelse(is.POSIX, T.POSIX, time.units),
                     Z.res=Z.res,
                     is.POSIX = is.POSIX)
-  
+
+  if(is.POSIX){
+    mrsa.fit$T.POSIX = T.POSIX
+    mrsa.fit$time.units = time.units
+  }
+    
   if(CI) {
     # obtain mean parameters
     hessian <- p.mu.fit$hessian

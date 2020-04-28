@@ -216,7 +216,7 @@ par(bty="l")
 
 The `quickfit` function will also generally work for three ranges:
 ```{r quickfit2, echo=-1, cache=FALSE}
-par(bty="l"); set.seed(1979)
+par(bty="l"); set.seed(1975)
 (p.m0 <- with(MOU.3range, quickfit(T,X,Y, dt = 1, n.clust = 3)))
 ```
 
@@ -241,7 +241,7 @@ One of the outputs of the fitted model object is a vector of residuals.  These r
 Below, we visualize the three residual vectors from fits of the the three single-shift models.  Note that we prefer using the likelihood method for the `MOU` and `MOUF` simulations and - in order to speed up the fitting - we pre-assigned the fits to the white noise (MWN) model, since we are interested in analyzing the residuals. 
 
 ```{r ThreeResidualFits, eval=TRUE, cache=FALSE, echo = -1, fig.height = 3}
-par(mfrow= c(1,3), bty="l", echo=-1)
+par(mfrow= c(1,3), bty="l")
 data(SimulatedTracks)
 MWN.res <- with(MWN.sim, estimate_shift(T, X, Y, model = "wn"))$Z.res
 MOU.res <- with(MOU.sim, estimate_shift(T, X, Y, model = "wn"))$Z.res
@@ -284,21 +284,24 @@ par(bty="l")
 data(Michela)
 with(Michela, scan_track(time = time, x = x, y = y))
 ```
+
 Over the period of study, between February 2005 and April 2006, there is a clear seasonal migration to a summering ground and a return.
 
-We can fit a three range model to the data. **Note:** *for the time being, the estimation routine can only handle numeric time objects.  Time data that are stored as POSIX (the standard time object) need to be converted to a unit like days or hours from an initial time.  For example, in the case of Michela, the `day` column was generated as:*
+We can fit a three range model to the data. **Note:** *the estimation routine can also handle POSIX (the standard time object data types, with a specified time unit).  For purposes of illustration, we convert to a `day` column as follows:*
+
 ```{r}
 # first day of first year
 day1 <- lubridate::ymd(paste(min(lubridate::year(Michela$time)), 1, 1))
+
 # find time difference and round (and make numeric)
-days <- as.numeric(round(difftime(Michela$time, day1, unit = "day")))
+Michela$day <- as.numeric(difftime(Michela$time, day1, unit = "day"))
 ```
 
 The initial guesses are best obtained using the interactive `locate_shift` function, which was used to obtain the values entered below. 
 
 ```{r Michela.fit, cache = FALSE, fig.height = 3, echo = -1}
 par(bty="l")
-# p.m0 <- with(Michela, locate_shift(time = day, x = x, y = y, n.clust = 3))
+# p.m0 <- with(Michela, locate_shift(time = time, x = x, y = y, n.clust = 3))
 p.m0 <- c(x1 = 653.6,  x2 = 658.85, x3 = 653.8, 
           y1 = 5094.8, y2 = 5096,   y3 = 5094.8, 
 					t1 = 118, t2 = 318, dt1 = 10.5, dt2 = 15.8)
@@ -322,11 +325,12 @@ It appears from the figure above that Michela settled into the summer territory 
 ```{r FitMichelaEarly, fig.height = 3, echo = -1, cache=TRUE}
 par(bty="l")
 #  p.m0 <- with(subset(Michela, day < 200), locate_shift(time = day, x = x, y = y, n.clust = 3))
-p.m0 <- c(x1 = 653.6,  x2 = 659.13, x3 = 658.96, 
-          y1 = 5094.8, y2 = 5096.5,   y3 = 5095.9, 
-					t1 = 120.5, t2 = 138.7, dt1 = 4, dt2 = 4.7)
+p.m0 <- c(x1 = 653.7,  x2 = 659.1, x3 = 659.0, 
+          y1 = 5094.8, y2 = 5096.4, y3 = 5095.9, 
+					t1 = 120.2, t2 = 138.3, dt1 = 4, dt2 = 6.8)
 Michela.fit.early <- with(subset(Michela, day < 200), 
-					estimate_shift(day, x, y, n.clust = 3, model = "ou", method = "like", p.m0 = p.m0))
+					estimate_shift(day, x, y, n.clust = 3, 
+					               model = "ou", method = "like", p.m0 = p.m0))
 plot(Michela.fit.early)
 summary(Michela.fit.early)
 ```

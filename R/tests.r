@@ -16,8 +16,10 @@
 #' @describeIn test_rangeshift Compare a two range fitted model to a null model of no range shift.
 #' @export
 test_rangeshift <- function(FIT, verbose = TRUE){
+  
   #method one of "ar" or "like", for AR equivalence or likelihood method
-	model <- FIT$model
+	
+  model <- FIT$model
 	method <- FIT$method
   p.hat <- FIT$p.hat
   ll <- FIT$ll
@@ -27,40 +29,40 @@ test_rangeshift <- function(FIT, verbose = TRUE){
   test.table <- data.frame(ll, k, aic)
 
 	# now - compute null model
-		Z.res.null <- (FIT$X + 1i*FIT$Y)
-		Z.res.null <- Z.res.null - mean(Z.res.null)
-		
-		# turn tau.hat into appropriate form
-		
-		p.s.null <- NULL
-		if(model != "wn"){
-			tau.hat.null <- getTau(Z.res.null, T = FIT$T, model = model, method = method)$tau.hat
-			if(model %in% c("ou", "ouf")) p.s.null <- c(logtau.z = log(t(tau.hat.null['tau.z'])))
-			if(model == "ouf") p.s.null["kappa"] <-  tau.hat.null["tau.v"] / tau.hat.null["tau.z"]
-		}
-		
-		ll.null <- getLikelihood.res(p.s = p.s.null, T=FIT$T, Z.res=Z.res.null, model=model)
-		k.null <- k-4
-		aic.null <-  -2*ll.null + 2*k.null
-		test.table <- data.frame(ll = c(ll.null, ll), k = c(k.null, k), aic = c(aic.null, aic))
-		row.names(test.table) <- c("with shift", "without shift")
-		
+  
+	Z.res.null <- (FIT$X + 1i*FIT$Y)
+	Z.res.null <- Z.res.null - mean(Z.res.null)
+	
+	# turn tau.hat into appropriate form
+	
+	p.s.null <- NULL
+	if(model != "wn"){
+		tau.hat.null <- getTau(Z.res.null, T = FIT$T, model = model, method = method)$tau.hat
+		if(model %in% c("ou", "ouf")) p.s.null <- c(logtau.z = log(t(tau.hat.null['tau.z'])))
+		if(model == "ouf") p.s.null["kappa"] <-  tau.hat.null["tau.v"] / tau.hat.null["tau.z"]
+	}
+	
+	ll.null <- getLikelihood.res(p.s = p.s.null, T=FIT$T, Z.res=Z.res.null, model=model)
+	k.null <- k-4
+	aic.null <-  -2*ll.null + 2*k.null
+	test.table <- data.frame(ll = c(ll.null, ll), k = c(k.null, k), aic = c(aic.null, aic))
+	row.names(test.table) <- c("without shift", "with shift")
+	
 	# construct test table
 		
-		lrt <- with(test.table, 2*(ll[1] - ll[2]))
-		p.value <- 1-pchisq(lrt, 2)
-
-		if(verbose){
-			print(test.table)
-			cat(paste0("
+	lrt <- with(test.table, 2*(ll[2] - ll[1]))
+	p.value <- 1-pchisq(lrt, diff(test.table$k))
+	
+	if(verbose){
+		print(test.table)
+		cat(paste0("
 l.r.t.: ", signif(lrt,3), " with ", 4, " degrees of freedom, ",
-								 "p-value: ", signif(p.value,4), "\n"))
-								 
-			if(p.value < 0.05 & with(test.table, aic[2] < aic[1])) cat("There is almost certainly a significant range shift.\n") else 
-			if(p.value > 0.05 & with(test.table, aic[2] > aic[1])) cat("There probably wasn't a range shift.\n") else cat("Tough call - there's disagreement in the criteria.\n")
-		}
-		invisible(list(aic.table = test.table,  lrt = lrt, df = 4, p.value = p.value))
- }
+							 "p-value: ", signif(p.value,4), "\n"))
+		if(p.value < 0.05 & with(test.table, aic[2] < aic[1])) cat("There is almost certainly a significant range shift.\n") else 
+		if(p.value > 0.05 & with(test.table, aic[2] > aic[1])) cat("There probably wasn't a range shift.\n") else cat("Tough call - there's disagreement in the criteria.\n")
+	}
+	invisible(list(aic.table = test.table,  lrt = lrt, df = 4, p.value = p.value))
+}
 
 #' @describeIn test_rangeshift Compares a three range fitted model in which the first and third ranges have the same centroid against a model where the first and third centroid are different.
 #' @export
@@ -91,26 +93,21 @@ test_return <- function(FIT, verbose = TRUE){
 	aic.return <- -2*ll.return - 2*(FIT$df - 2)
 	
 	# construct test table
-		
 	test.table <- data.frame(ll = c(ll.return, ll), 
 												   df = c(df - 2, df), 
 													 aic = c(aic.return, aic))
 													 
 	row.names(test.table) <- c("two range with return", "three ranges")
-	  
 	lrt <- with(test.table, 2*(ll[2] - ll[1]))
 	p.value <- 1-pchisq(lrt, 2)
-
-	if(verbose){
+  if(verbose){
 		print(test.table)
 		cat(paste0("
 l.r.t.: ", signif(lrt,3), " with ", 4, " degrees of freedom, ",
 							 "p-value: ", signif(p.value,4), "\n"))
-							 
 		if(p.value < 0.05 & with(test.table, aic[2] < aic[1])) cat("A model with three unique ranges is better.\n") else 
 		if(p.value > 0.05 & with(test.table, aic[2] > aic[1])) cat("The second migration was most likely a return migration.\n") else cat("Tough call - there's disagreement in the criteria.\n")
 	}
-	
 	invisible(list(aic.table = test.table, lrt = lrt, df = 2, p.value = p.value))
 }
 

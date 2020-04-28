@@ -30,21 +30,35 @@ plot.shiftfit <- function(x,
 	Y <- x$Y
 	Z <- X + 1i*Y
 	T <- x$T
-	
 	p.CI <- x$p.CI  
 	
-	
-	# SOMETIMES - there are infinities in the time estimates (usually with no real range shift). We need to tidy those with the following ugly code. 
+	# SOMETIMES - there are infinities in the time estimates (usually with no real range shift). 
+	# We need to tidy those with the following ugly code. 
 	
 	ts <- which(grepl("t", row.names(p.CI)) & !(grepl("tau", row.names(p.CI))))
-	if( max(abs(p.CI[ts,2:3])) == Inf) cat("Some confidence intervals around the timing parameters are infinitely wide.  I'll plot something fat but not quite THAT wide.  The range shift model might not be appropriate.\n")
+	if(max(abs(p.CI[ts,2:3]), na.rm = TRUE) == Inf){
+	  par.inf <- rownames(p.CI)[which(p.CI$CI.high == Inf)]
+	  warning(paste0("At least one confidence interval  (", 
+	                 paste(par.inf, collapse = ", "), 
+	                 ") is infinitely wide.  I'll plot something fat but not quite THAT wide.  
+You may consider trying to refit the model (or that the range-shift model is not appropriate).\n"))
+	  p.CI[ts,]$CI.high <- pmin(p.CI[ts,]$CI.high, p.CI[ts,]$p.hat*10)
+	  p.CI[ts,]$CI.low <- pmax(p.CI[ts,]$CI.low, min(x$T))
+	}
 	
-	p.CI[ts,]$CI.high <- pmin(p.CI[ts,]$CI.high, p.CI[ts,]$p.hat*10)
-	ts <-  which(row.names(p.CI) %in% c("t1","t2"))
-	p.CI[ts,]$CI.low <- pmax(p.CI[ts,]$CI.low, min(x$T))
+	# SOMETIMES - there are also NA's in the time confidence intervals (mainly for dt). 
+	# Not much to do here except not plot them
+
+	if(any(is.na(p.CI[ts,]))){
+	  par.na <- names(which(rowSums(is.na(p.CI[ts,])) > 0))
+	  warning(paste0("At least one confidence interval (", 
+	                 paste(par.na, collapse = ", "), 
+	                 ") could not be computed and will not be illustrated.\n"))
+	  p.CI[par.na,]$CI.high <- p.CI[par.na,]$p.hat
+	  p.CI[par.na,]$CI.low <- p.CI[par.na,]$p.hat
+	}
 
 	# carrying on ...
-	
 	p.hat <- t(p.CI)[1,] %>% t %>% data.frame
 
 	z.95 <- sqrt(-2*log(1-0.95))
@@ -72,7 +86,8 @@ plot.shiftfit <- function(x,
 	plot(X,Y, asp=1, type = "n", ...)
 	if(n.clust == 2){
 		if(bars){ 
-		  Z.bars <- getBars(p.mu.hat, p.mu.se, n.sims = bar.params[1], n.time = bar.params[2], n.bins = bar.params[3], stretch = stretch)
+		  Z.bars <- getBars(p.mu.hat, p.mu.se, n.sims = bar.params[1], n.time = bar.params[2], 
+		                    n.bins = bar.params[3], stretch = stretch)
   		# draw big bar
 		  polygon.Z(Z.bars[,1], Z.bars[,4], col=g1)
 		}
@@ -137,7 +152,8 @@ plot.shiftfit <- function(x,
 }
 
 
-plotFit.ts <- function(FIT, pt.col = "antiquewhite", CI.cols = NULL, n.sims = 1e3, xlab = "Time", pt.cex = 1, ...){
+plotFit.ts <- function(FIT, pt.col = "antiquewhite", CI.cols = NULL, 
+                       n.sims = 1e3, xlab = "Time", pt.cex = 1, ...){
 
   gr1 <- grey(.2)
  
