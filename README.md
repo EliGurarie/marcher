@@ -1,12 +1,17 @@
 # marcher
 Migration and Range Change Estimation in R (Development version)
 
-> UPDATE 2019.10.04: Github version has been updated to iron out some issues (especially with plotting).  Install via:
+> UPDATE 2020.04.27: Github version has been updated to iron out some more issues, including an error in the range-shift testing function.  
+
+Install via:
 
 ```
 require(devtools)
 install_github("EliGurarie/marcher", build_vignettes = TRUE)
 ```
+
+> UPDATE 2019.10.04: Github version has been updated to iron out some issues (especially with plotting).  
+
 
 > UPDATE 2017.04.12: A stable version of `marcher` is now on CRAN at https://cran.r-project.org/web/packages/marcher/index.html
 
