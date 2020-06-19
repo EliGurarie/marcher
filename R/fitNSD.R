@@ -1,7 +1,7 @@
 #' Test range shift using net-squared displacement
 #' 
 #' @details The test below assumes that the net squared displacement (NSD) for a migrating organism is well characterized 
-#' by the logistic formula: E(NSD(t)) =  a / (1 + exp [(b-t)/c] as described in Boerger and Fryxell (2012).  In practice, 
+#' by the logistic formula: E(NSD(t)) =  a / (1 + exp [(b-t)/c]) as described in Boerger and Fryxell (2012).  In practice, 
 #' the square root of the NSD, i.e., the linear displacement, is fitted to the square root of the formula assuming Gaussian 
 #' residuals with constant variance 's'.  A likelihood ratio test against a null model of no-dispersal is provided at a 95\% 
 #' significance level.
