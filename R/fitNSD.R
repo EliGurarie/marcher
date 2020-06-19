@@ -1,16 +1,25 @@
 #' Test range shift using net-squared displacement
 #' 
-#' @details The test below assumes that the net squared displacement (NSD) for a migrating organism is well characterized by the logistic formula: E(NSD(t)) =  a / (1 + exp [(b-t)/c] as described in border=ger and Fryxell (2012).  In practice, the square root of the NSD, i.e., the linear displacement, is fitted to the square root of the formula assuming Gaussian residuals with constant variance 's'.  A likelihood ratio test against a null model of no-dispersal is provided at a 95\% significance level.
+#' @details The test below assumes that the net squared displacement (NSD) for a migrating organism is well characterized 
+#' by the logistic formula: E(NSD(t)) =  a / (1 + exp [(b-t)/c] as described in Boerger and Fryxell (2012).  In practice, 
+#' the square root of the NSD, i.e., the linear displacement, is fitted to the square root of the formula assuming Gaussian 
+#' residuals with constant variance 's'.  A likelihood ratio test against a null model of no-dispersal is provided at a 95\% 
+#' significance level.
 #' @param T time
 #' @param plotme whether or not to plot the result
 #' @param setpar whether or not to run par(mfrow = c(1,2)) before plotting
 #' @param X x coordinate
 #' @param Y y coordinate
 #' @param ... additional parameters to pass to \code{plot}
+#' @encoding UTF-8
+#' @references Boerger, L. & Fryxell, J. (2012) Quantifying individual differences in dispersal using net squared displacement. 
+#' Dispersal Ecology and Evolution (eds. J. Clobert, M. Baguette, T. Benton & J. Bullock), pp. 222-228. Oxford University 
+#' Press, Oxford, UK.
 #'
 #' @return a list with a vector of four parameter estimates, and a vector with test statistics (likelihood, AIC and p.values)
 #' @example ./demo/fitNSD_example.r
 #' @export
+#' 
 fitNSD <- function(T,X,Y,plotme=FALSE,setpar=TRUE, ...){
   
   Z <- X + 1i*Y

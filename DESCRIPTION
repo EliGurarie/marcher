@@ -25,5 +25,5 @@ Imports:
     lubridate
 VignetteBuilder: knitr
 BugReports: https://github.com/EliGurarie/marcher/issues
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests: knitr, rmarkdown, lubridate

@@ -9,9 +9,11 @@
 \alias{MOUF.sim.random}
 \alias{MWN.sim}
 \title{Simulated range shift tracks}
-\format{Each of these is a data frame with 100 observations of 
+\format{
+Each of these is a data frame with 100 observations of 
 three numeric variables (except for MOU.3range, which has 200 observations).  
-The columns are: \code{T}, \code{X}, \code{Y}.}
+The columns are: \code{T}, \code{X}, \code{Y}.
+}
 \source{
 Code to simulate tracks like these are provided in the marcher vignette.
 }

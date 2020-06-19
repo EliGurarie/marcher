@@ -4,7 +4,8 @@
 \name{Michela}
 \alias{Michela}
 \title{Movement track of Michela, a roe deer}
-\format{Data frame containing movements of roe deer with the following columns:
+\format{
+Data frame containing movements of roe deer with the following columns:
 \describe{
   \item{id}{ID of animal}
   \item{name}{Names - for mnemonic convenience - of Italian authors.}
@@ -12,7 +13,8 @@
   \item{latitude, longitude}{}
   \item{time}{POSIXct object}
   \item{day}{Day of year, counting from January 1 of the first year of observations 
-  (thus day 367 is January 2 or the following year).}}}
+  (thus day 367 is January 2 or the following year).}}
+}
 \usage{
 data(Michela)
 }
