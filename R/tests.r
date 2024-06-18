@@ -131,7 +131,7 @@ l.r.t.: ", signif(lrt,3), " with ", 4, " degrees of freedom, ",
 	
 	test.table <- data.frame(ll = c(FIT.nostopover$ll, ll), 
 	           aic = c(FIT.nostopover$aic, FIT$aic))
-	row.names(test.table) <- c("with stopover", "without stopover")
+	row.names(test.table) <- c("without stopover", "with stopover")
 	  
 	lrt <- with(test.table, 2*(ll[2] - ll[1]))
 	p.value <- 1-pchisq(lrt, 4)

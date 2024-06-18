@@ -31,10 +31,10 @@ Three tests for three hypotheses to test on fitted range shifts: Was the range s
 }
 \section{Functions}{
 \itemize{
-\item \code{test_rangeshift}: Compare a two range fitted model to a null model of no range shift.
+\item \code{test_rangeshift()}: Compare a two range fitted model to a null model of no range shift.
 
-\item \code{test_return}: Compares a three range fitted model in which the first and third ranges have the same centroid against a model where the first and third centroid are different.
+\item \code{test_return()}: Compares a three range fitted model in which the first and third ranges have the same centroid against a model where the first and third centroid are different.
 
-\item \code{test_stopover}: Compare a three range model with an apparent stopover (shorter intermediate range), and see if a more parsimonious model excludes the stopover.
+\item \code{test_stopover()}: Compare a three range model with an apparent stopover (shorter intermediate range), and see if a more parsimonious model excludes the stopover.
+
 }}
-
